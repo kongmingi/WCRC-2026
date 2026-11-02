@@ -85,10 +85,8 @@ void InitHardware()
     uint8_t id = JOINT_IDS[i];
     dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
     dxl.writeControlTableItem(DRIVE_MODE, id, 1 + 4);
-    dxl.writeControlTableItem(OPERATING_MODE, id, 3);
-    dxl.writeControlTableItem(MIN_POSITION_LIMIT, id, 0);
-    dxl.writeControlTableItem(MAX_POSITION_LIMIT, id, 4095);
-    dxl.writeControlTableItem(HOMING_OFFSET, id, JOINT_OFFSET[i]);
+    dxl.writeControlTableItem(OPERATING_MODE, id, 4);
+    dxl.writeControlTableItem(HOMING_OFFSET, id, 0);
   }
   for (uint8_t i = 0; i < 4; i++) dxl.reboot(JOINT_IDS[i]);
   delay(800);
@@ -305,6 +303,23 @@ void FollowWallBack(float mm, float mmps, int slTargetAdc)
   BaseStop();
 }
 
+static int32_t ToWindow(int32_t raw, uint8_t i)
+{
+  int32_t lo = ((int32_t)JOINT_MIN[i] + JOINT_MAX[i]) / 2 - 2048;
+  int32_t v = (raw - lo) % 4096;
+  if (v < 0) v += 4096;
+  return lo + v;
+}
+
+static bool ReadJointRaw(uint8_t i, int32_t& raw)
+{
+  for (uint8_t k = 0; k < 3; k++) {
+    raw = dxl.readControlTableItem(PRESENT_POSITION, JOINT_IDS[i]);
+    if (dxl.getLastLibErrCode() == DXL_LIB_OK) return true;
+  }
+  return false;
+}
+
 bool PoseValid(const Pose& p)
 {
   return !(p.j1 == 0 && p.j2 == 0 && p.j3 == 0 && p.j4 == 0);
@@ -320,8 +335,13 @@ bool ArmMove(const int16_t* joints, uint16_t ms)
     }
   }
   for (uint8_t i = 0; i < 4; i++) {
+    int32_t raw;
+    if (!ReadJointRaw(i, raw)) {
+      Serial.println(F("arm read fail"));
+      return false;
+    }
     jointPos[i].profile = ms;
-    jointPos[i].goal = joints[i];
+    jointPos[i].goal = raw + (joints[i] - ToWindow(raw, i));
   }
   SendSync(swJoint);
   WaitMs(ms + POSE_SETTLE_MS);
@@ -340,8 +360,11 @@ bool ArmPose(const Pose& p, uint16_t ms)
 
 void ArmRead(int16_t* joints)
 {
-  for (uint8_t i = 0; i < 4; i++)
-    joints[i] = dxl.readControlTableItem(PRESENT_POSITION, JOINT_IDS[i]);
+  for (uint8_t i = 0; i < 4; i++) {
+    int32_t raw = 0;
+    ReadJointRaw(i, raw);
+    joints[i] = ToWindow(raw, i);
+  }
 }
 
 void Grip(int16_t value)
