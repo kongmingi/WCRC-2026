@@ -70,7 +70,6 @@ void SegLineToOrder()
 {
   DriveMm(LEFT, DIST_LINE_TO_ORDER_MM, SPEED_NORMAL_MMPS);
   AlignPsd(PSD_SL, PSD_ORDER_SL_ADC, PSD_ALIGN_TOL_ADC);
-  pixy.setLamp(CAM_LAMP_ON, CAM_LAMP_ON);
   gOrderCount = 0;
   if (ORDER_READ_ENABLE && ArmPose(POSE_ORDER_VIEW))
     gOrderCount = ReadOrder(gOrder);
@@ -99,7 +98,7 @@ static void AlignAnchor()
 
 void SegOrderToStorage()
 {
-  ArmPose(POSE_TRAVEL);
+  ArmPose(POSE_SCAN_UPPER);
   DriveMm(FWD, DIST_ORDER_TO_STORAGE_MM, SPEED_FAST_MMPS);
   ApproachFront(PSD_FR, PSD_STORAGE_DETECT_ADC, STORAGE_APPROACH_MAX_MM, SPEED_SLOW_MMPS);
   AlignAnchor();
@@ -247,6 +246,7 @@ void Deliver(char zone, uint8_t cell)
     DriveMm(FWD, ZONE_B_BACK_MM, SPEED_FAST_MMPS);
     DriveMm(LEFT, ZONE_B_LANE_RIGHT_MM, SPEED_NORMAL_MMPS);
   }
+  ArmPose(POSE_SCAN_UPPER);
   ApproachFront(PSD_FR, PSD_STORAGE_DETECT_ADC, STORAGE_APPROACH_MAX_MM, SPEED_SLOW_MMPS);
   AlignAnchor();
 }
@@ -254,7 +254,6 @@ void Deliver(char zone, uint8_t cell)
 void SegFinish()
 {
   ArmPose(POSE_TRAVEL);
-  pixy.setLamp(0, 0);
   DriveMm(RIGHT, FINISH_LANE_RIGHT_MM, SPEED_NORMAL_MMPS);
   FollowWallBack(FINISH_BACK_MM, FINISH_SPEED_MMPS, PSD_FINISH_SL_ADC);
   DriveMm(LEFT, FINISH_LEFT_MM, SPEED_NORMAL_MMPS);

@@ -5,6 +5,12 @@
 
 static char line[48];
 
+static void ArmTorque(bool on)
+{
+  for (uint8_t id = 5; id <= 8; id++)
+    dxl.writeControlTableItem(ControlTableItem::TORQUE_ENABLE, id, on ? 1 : 0);
+}
+
 static void Arm()
 {
   delay(50);
@@ -49,7 +55,7 @@ static Dir DirByChar(char c)
 
 void ConsolePrintHelp()
 {
-  Serial.println(F("grip 650 | j3 +20 | j3 1500 | arm a b c d | pose | p travel"));
+  Serial.println(F("grip 650 | j3 +20 | j3 1500 | arm a b c d | pose | p travel | free | lock"));
   Serial.println(F("move F 300 (F/B/L/R) | psd | check"));
   Serial.println(F("t1 sensor | t2 move | t3 2 4 (layer color) | t3 A 5 (drop)"));
   Serial.println(F("t4 scan | t5 1~6 segment | t6 full mission"));
@@ -139,6 +145,19 @@ void ConsoleRunLine()
     Serial.print(PsdRead(PSD_SL)); Serial.print(' ');
     Serial.print(PsdRead(PSD_FR)); Serial.print(' ');
     Serial.println(PsdRead(PSD_SR));
+    return;
+  }
+  if (!strcmp(cmd, "free")) {
+    ArmTorque(false);
+    Serial.println(F("arm free"));
+    return;
+  }
+  if (!strcmp(cmd, "lock")) {
+    int16_t j[4];
+    ArmRead(j);
+    ArmTorque(true);
+    ArmMove(j, 300);
+    PrintPose();
     return;
   }
   if (!strcmp(cmd, "grip") && a1) {

@@ -25,8 +25,8 @@ const uint32_t MATCH_LIMIT_MS = 115000;
 const uint32_t RETURN_RESERVE_MS = 15000;
 
 
-const float SPEED_FAST_MMPS = 144;
-const float SPEED_NORMAL_MMPS = 108;
+const float SPEED_FAST_MMPS = 200;
+const float SPEED_NORMAL_MMPS = 144;
 const float SPEED_SLOW_MMPS = 54;
 const float SPEED_CENTER_MMPS = 35;
 
@@ -112,15 +112,15 @@ const uint32_t CENTER_TIMEOUT_MS = 4000;
 
 
 const int16_t GRIP_OPEN = 100;
-const int16_t GRIP_CLOSE = 930;
-const int16_t GRIP_RELEASE = 100;
+const int16_t GRIP_CLOSE = 720;
+const int16_t GRIP_RELEASE = 450;
 const uint16_t GRIP_WAIT_MS = 350;
 
 const uint16_t POSE_MOVE_MS = 500;
 const uint16_t POSE_SETTLE_MS = 100;
 
-const int16_t JOINT_MIN[4] = { 0, 1024, 211, 722 };
-const int16_t JOINT_MAX[4] = { 4095, 3474, 2640, 3161 };
+const int16_t JOINT_MIN[4] = { 0, 0, 1200, 0 };
+const int16_t JOINT_MAX[4] = { 4095, 4095, 2900, 4095 };
 
 const Pose POSE_TRAVEL     = { 0, 0, 0, 0 };
 const Pose POSE_ORDER_VIEW = { 0, 0, 0, 0 };

@@ -12,9 +12,9 @@ static Adafruit_NeoPixel rgb(1, PIN_RGB, NEO_GRBW + NEO_KHZ800);
 
 static const uint8_t WHEEL_IDS[4] = { 1, 2, 3, 4 };
 static const uint8_t JOINT_IDS[4] = { 5, 6, 7, 8 };
-static const int32_t JOINT_HW_MIN[4] = { 0, 1024, 211, 722 };
-static const int32_t JOINT_HW_MAX[4] = { 4095, 3474, 2640, 3161 };
-static const int32_t JOINT_HOMING[4] = { 0, 238, 799, 0 };
+static const int32_t JOINT_HW_MIN[4] = { 0, 0, 0, 0 };
+static const int32_t JOINT_HW_MAX[4] = { 4095, 4095, 4095, 4095 };
+static const int32_t JOINT_HOMING[4] = { 0, 0, -1638, 0 };
 static const float WHEEL_RADIUS_MM = 30.0;
 static const float VEL_UNITS_PER_MMPS = 60.0 / (2.0 * PI * WHEEL_RADIUS_MM) / 0.229;
 static const uint8_t MODE_VELOCITY = 1;
@@ -78,7 +78,7 @@ void InitHardware()
   rgb.setBrightness(50);
   Led(0, 0, 255);
 
-  dxl.begin(57600);
+  dxl.begin(1000000);
   dxl.setPortProtocolVersion(2.0);
   SetupSync(swWheelPos, xWheelPos, WHEEL_IDS, (uint8_t*)wheelPos, 112, 8);
   SetupSync(swWheelVel, xWheelVel, WHEEL_IDS, (uint8_t*)wheelVel, 104, 4);
@@ -99,7 +99,7 @@ void InitHardware()
   SetBaseMode(MODE_VELOCITY);
   BaseStop();
   pixy.init();
-  pixy.setLamp(0, 0);
+  pixy.setLamp(CAM_LAMP_ON, CAM_LAMP_ON);
 }
 
 bool SelfCheck()
@@ -341,8 +341,10 @@ bool ArmPose(const Pose& p, uint16_t ms)
 
 void ArmRead(int16_t* joints)
 {
-  for (uint8_t i = 0; i < 4; i++)
-    joints[i] = dxl.readControlTableItem(PRESENT_POSITION, JOINT_IDS[i]);
+  for (uint8_t i = 0; i < 4; i++) {
+    int32_t v = dxl.readControlTableItem(PRESENT_POSITION, JOINT_IDS[i]);
+    joints[i] = ((v % 4096) + 4096) % 4096;
+  }
 }
 
 void Grip(int16_t value)
