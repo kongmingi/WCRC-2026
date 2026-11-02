@@ -12,9 +12,6 @@ static Adafruit_NeoPixel rgb(1, PIN_RGB, NEO_GRBW + NEO_KHZ800);
 
 static const uint8_t WHEEL_IDS[4] = { 1, 2, 3, 4 };
 static const uint8_t JOINT_IDS[4] = { 5, 6, 7, 8 };
-static const int32_t JOINT_HW_MIN[4] = { 0, 1024, 211, 722 };
-static const int32_t JOINT_HW_MAX[4] = { 4095, 3474, 2640, 3161 };
-static const int32_t JOINT_HOMING[4] = { 0, 238, 799, 0 };
 static const float WHEEL_RADIUS_MM = 30.0;
 static const float VEL_UNITS_PER_MMPS = 60.0 / (2.0 * PI * WHEEL_RADIUS_MM) / 0.229;
 static const uint8_t MODE_VELOCITY = 1;
@@ -89,11 +86,13 @@ void InitHardware()
     dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
     dxl.writeControlTableItem(DRIVE_MODE, id, 1 + 4);
     dxl.writeControlTableItem(OPERATING_MODE, id, 3);
-    dxl.writeControlTableItem(MIN_POSITION_LIMIT, id, JOINT_HW_MIN[i]);
-    dxl.writeControlTableItem(MAX_POSITION_LIMIT, id, JOINT_HW_MAX[i]);
-    dxl.writeControlTableItem(HOMING_OFFSET, id, JOINT_HOMING[i]);
-    dxl.writeControlTableItem(TORQUE_ENABLE, id, 1);
+    dxl.writeControlTableItem(MIN_POSITION_LIMIT, id, 0);
+    dxl.writeControlTableItem(MAX_POSITION_LIMIT, id, 4095);
+    dxl.writeControlTableItem(HOMING_OFFSET, id, JOINT_OFFSET[i]);
   }
+  for (uint8_t i = 0; i < 4; i++) dxl.reboot(JOINT_IDS[i]);
+  delay(800);
+  for (uint8_t i = 0; i < 4; i++) dxl.writeControlTableItem(TORQUE_ENABLE, JOINT_IDS[i], 1);
 
   baseMode = 0;
   SetBaseMode(MODE_VELOCITY);

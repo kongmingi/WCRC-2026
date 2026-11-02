@@ -119,8 +119,9 @@ const uint16_t GRIP_WAIT_MS = 350;
 const uint16_t POSE_MOVE_MS = 500;
 const uint16_t POSE_SETTLE_MS = 100;
 
-const int16_t JOINT_MIN[4] = { 0, 1024, 211, 722 };
-const int16_t JOINT_MAX[4] = { 4095, 3474, 2640, 3161 };
+const int32_t JOINT_OFFSET[4] = { 0, 0, 0, 0 };
+const int16_t JOINT_MIN[4] = { 0, 0, 0, 0 };
+const int16_t JOINT_MAX[4] = { 4095, 4095, 4095, 4095 };
 
 const Pose POSE_TRAVEL     = { 0, 0, 0, 0 };
 const Pose POSE_ORDER_VIEW = { 0, 0, 0, 0 };
