@@ -12,9 +12,9 @@ static Adafruit_NeoPixel rgb(1, PIN_RGB, NEO_GRBW + NEO_KHZ800);
 
 static const uint8_t WHEEL_IDS[4] = { 1, 2, 3, 4 };
 static const uint8_t JOINT_IDS[4] = { 5, 6, 7, 8 };
-static const int32_t JOINT_HW_MIN[4] = { 0, 0, 0, 0 };
-static const int32_t JOINT_HW_MAX[4] = { 4095, 4095, 4095, 4095 };
-static const int32_t JOINT_HOMING[4] = { 0, 0, -1638, 0 };
+static const int32_t JOINT_HW_MIN[4] = { 0, 1024, 211, 722 };
+static const int32_t JOINT_HW_MAX[4] = { 4095, 3474, 2640, 3161 };
+static const int32_t JOINT_HOMING[4] = { 0, 238, 799, 0 };
 static const float WHEEL_RADIUS_MM = 30.0;
 static const float VEL_UNITS_PER_MMPS = 60.0 / (2.0 * PI * WHEEL_RADIUS_MM) / 0.229;
 static const uint8_t MODE_VELOCITY = 1;
@@ -341,10 +341,8 @@ bool ArmPose(const Pose& p, uint16_t ms)
 
 void ArmRead(int16_t* joints)
 {
-  for (uint8_t i = 0; i < 4; i++) {
-    int32_t v = dxl.readControlTableItem(PRESENT_POSITION, JOINT_IDS[i]);
-    joints[i] = ((v % 4096) + 4096) % 4096;
-  }
+  for (uint8_t i = 0; i < 4; i++)
+    joints[i] = dxl.readControlTableItem(PRESENT_POSITION, JOINT_IDS[i]);
 }
 
 void Grip(int16_t value)

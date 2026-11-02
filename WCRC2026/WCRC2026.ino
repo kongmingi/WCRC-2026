@@ -9,7 +9,6 @@ void setup()
   InitHardware();
   SelfCheck();
   Grip(GRIP_OPEN);
-  if (PoseValid(POSE_TRAVEL)) ArmPose(POSE_TRAVEL);
   ConsolePrintHelp();
   Serial.println(F("SW1: start mission"));
 }
