@@ -18,7 +18,7 @@ const uint8_t MISSION_COUNT = sizeof(MISSION) / sizeof(MISSION[0]);
 
 const bool ORDER_READ_ENABLE = true;
 const bool ORDER_REVERSE = false;
-const bool PICK_VERIFY_ENABLE = true;
+const bool PICK_VERIFY_ENABLE = false;
 const uint8_t PICK_RETRY = 1;
 
 const uint32_t MATCH_LIMIT_MS = 115000;
@@ -108,8 +108,8 @@ const float CENTER_MAX_STEP_MM = 6;
 const uint32_t CENTER_TIMEOUT_MS = 4000;
 
 
-const int16_t GRIP_OPEN = 100;
-const int16_t GRIP_CLOSE = 720;
+const int16_t GRIP_OPEN = 250;
+const int16_t GRIP_CLOSE = 740;
 const int16_t GRIP_RELEASE = 450;
 const uint16_t GRIP_WAIT_MS = 350;
 
@@ -130,8 +130,8 @@ const Pose POSE_TRAVEL     = { 631, 1469, 4278, 1344 };
 const Pose POSE_ORDER_VIEW = { 1659, 1143, 4469, 1245 };
 const Pose POSE_HUB        = { 1623, 1350, 4852, 2039 };
 
-const Pose POSE_SCAN[3]      = { { 1643, 2430, 4467, 3149 }, { 1665, 1921, 4985, 2742 }, { 1657, 1658, 4697, 2205 } };
-const Pose POSE_PICK_GRIP[3] = { { 1601, 2200, 4852, 2936 }, { 1598, 1770, 4694, 2377 }, { 1638, 1756, 4213, 1902 } };
+const Pose POSE_SCAN[3]      = { { 1602, 2395, 5012, 3151 }, { 1665, 1921, 4985, 2742 }, { 1657, 1658, 4697, 2205 } };
+const Pose POSE_PICK_GRIP[3] = { { 1601, 2200, 4852, 2936 }, { 1598, 1770, 4694, 2377 }, { 1638, 1756, 4230, 1902 } };
 
 const Pose POSE_ZONE_A[8] = {
   { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
