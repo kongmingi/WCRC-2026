@@ -4,7 +4,7 @@
 using namespace ControlTableItem;
 
 Dynamixel2Arduino dxl(Serial1, 2);
-Pixy2SPI_SS pixy;
+Pixy2 pixy;
 jmp_buf gAbortJump;
 bool gAbortArmed = false;
 

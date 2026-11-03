@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <setjmp.h>
 #include <Dynamixel2Arduino.h>
-#include <Pixy2SPI_SS.h>
+#include <Pixy2.h>
 #include "Tuning.h"
 
 enum Dir : uint8_t { FWD, BWD, LEFT, RIGHT };
@@ -19,7 +19,7 @@ const uint8_t PSD_FR = A2;
 const uint8_t PSD_SR = A3;
 
 extern Dynamixel2Arduino dxl;
-extern Pixy2SPI_SS pixy;
+extern Pixy2 pixy;
 extern jmp_buf gAbortJump;
 extern bool gAbortArmed;
 
