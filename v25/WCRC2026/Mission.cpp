@@ -239,7 +239,6 @@ static bool GripSequence(uint8_t layer, uint8_t sig)
   for (uint8_t attempt = 0; attempt <= PICK_RETRY; attempt++) {
     Grip(GRIP_OPEN);
     WaitMs(GRIP_WAIT_MS);
-    ArmPose(POSE_HUB);
     ArmPose(POSE_PICK_APPROACH[layer]);
     ArmPose(POSE_PICK_GRIP[layer], true);
     Shift(FWD, BWD, PICK_FWD_MM, SPEED_SLOW_MMPS);
