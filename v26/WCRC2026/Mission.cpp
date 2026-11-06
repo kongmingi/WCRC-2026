@@ -28,16 +28,6 @@ static const Pose& ScanPose(uint8_t layer)
   return POSE_SCAN[layer];
 }
 
-static uint8_t FrontPin()
-{
-  return gCol >= 3 ? PSD_FL : PSD_FR;
-}
-
-static int FrontTarget(uint8_t layer)
-{
-  return layer == 0 ? PSD_STORAGE_L1_FR_ADC : PSD_STORAGE_FR_ADC;
-}
-
 static void Shift(Dir plus, Dir minus, float mm, float mmps)
 {
   if (mm > 0.5) DriveMm(plus, mm, mmps);
@@ -154,7 +144,6 @@ void SegLineToOrder()
 
 static void AlignAnchor()
 {
-  AlignPsd(PSD_FR, PSD_STORAGE_FR_ADC, PSD_ALIGN_TOL_ADC);
   AlignPsd(PSD_SL, PSD_STORAGE_COL1_SL_ADC, PSD_ALIGN_TOL_ADC);
   gCol = 0;
   gLateralMm = 0;
@@ -170,7 +159,6 @@ static void GoColumn(uint8_t c)
 
 static void AnchorWithHeading()
 {
-  AlignPsd(FrontPin(), PSD_STORAGE_FR_ADC, PSD_ALIGN_TOL_ADC);
   if (HEADING_ENABLE) {
     GoColumn(1);
     AlignHeading();
@@ -184,7 +172,6 @@ void SegOrderToStorage()
   ArmPose(POSE_ORDER_VIEW);
   DriveMm(FWD, DIST_ORDER_TO_STORAGE_MM, SPEED_FAST_MMPS);
   DriveMm(RIGHT, ORDER_TO_COL1_RIGHT_MM, SPEED_NORMAL_MMPS);
-  ApproachFront(PSD_FR, PSD_STORAGE_DETECT_ADC, STORAGE_APPROACH_MAX_MM, SPEED_SLOW_MMPS);
   gCol = 0;
   gLateralMm = 0;
   AnchorWithHeading();
@@ -193,7 +180,6 @@ void SegOrderToStorage()
 static void GoAnchor()
 {
   ArmPose(POSE_TRAVEL);
-  AlignPsd(FrontPin(), PSD_STORAGE_FR_ADC, PSD_ALIGN_TOL_ADC);
   GoColumn(0);
   AlignAnchor();
 }
@@ -201,7 +187,6 @@ static void GoAnchor()
 static void ScanColumn(uint8_t c)
 {
   GoColumn(c);
-  AlignPsd(FrontPin(), PSD_STORAGE_FR_ADC, PSD_ALIGN_TOL_ADC);
   if (c == 1) AlignHeading();
   ArmPose(POSE_HUB);
   for (int8_t l = 2; l >= 0; l--) {
@@ -247,7 +232,6 @@ static bool GripSequence(uint8_t layer, uint8_t sig)
     WaitMs(GRIP_WAIT_MS);
     ArmPose(POSE_PICK_APPROACH[layer], true);
     ArmPose(POSE_TRAVEL);
-    AlignPsd(FrontPin(), FrontTarget(layer), PSD_ALIGN_TOL_ADC);
     if (!PICK_VERIFY_ENABLE) return true;
     ArmPose(ScanPose(layer));
     WaitMs(SCAN_SETTLE_MS);
@@ -260,7 +244,6 @@ static bool GripSequence(uint8_t layer, uint8_t sig)
 
 uint8_t PickHere(uint8_t layer, uint8_t sig)
 {
-  AlignPsd(FrontPin(), FrontTarget(layer), PSD_ALIGN_TOL_ADC);
   ArmPose(POSE_HUB);
   if (!ArmPose(ScanPose(layer))) return PICK_FAIL;
   WaitMs(SCAN_SETTLE_MS);
@@ -273,7 +256,6 @@ uint8_t PickHere(uint8_t layer, uint8_t sig)
   gLateralMm += moved;
   if (!centered) return PICK_FAIL;
   ArmPose(POSE_HUB);
-  AlignPsd(FrontPin(), FrontTarget(layer), PSD_ALIGN_TOL_ADC);
   return GripSequence(layer, sig) ? PICK_OK : PICK_FAIL;
 }
 
@@ -319,7 +301,6 @@ void Deliver(char zone, uint8_t cell)
   } else {
     float shift = ZONE_B_CELL_SHIFT_MM[cell - 1];
     GoColumn(3);
-    AlignPsd(FrontPin(), PSD_STORAGE_FR_ADC, PSD_ALIGN_TOL_ADC);
     DriveMm(RIGHT, ZONE_B_LANE_RIGHT_MM, SPEED_NORMAL_MMPS);
     DriveMm(BWD, ZONE_B_BACK_MM, SPEED_FAST_MMPS);
     AlignPsd(PSD_SR, PSD_ZONE_B_SR_ADC, PSD_ALIGN_TOL_ADC);
@@ -331,7 +312,6 @@ void Deliver(char zone, uint8_t cell)
     GoColumn(0);
   }
   ArmPose(POSE_HUB);
-  ApproachFront(PSD_FR, PSD_STORAGE_DETECT_ADC, STORAGE_APPROACH_MAX_MM, SPEED_SLOW_MMPS);
   gCol = 0;
   gLateralMm = 0;
   AnchorWithHeading();
