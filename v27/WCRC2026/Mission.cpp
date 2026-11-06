@@ -226,7 +226,6 @@ static bool GripSequence(uint8_t layer, uint8_t sig)
     WaitMs(GRIP_WAIT_MS);
     ArmPose(POSE_PICK_APPROACH[layer]);
     ArmPose(POSE_PICK_GRIP[layer], true);
-    Shift(FWD, BWD, PICK_FWD_MM, SPEED_SLOW_MMPS);
     WaitMs(PICK_SETTLE_MS);
     Grip(GRIP_CLOSE);
     WaitMs(GRIP_WAIT_MS);
@@ -244,18 +243,18 @@ static bool GripSequence(uint8_t layer, uint8_t sig)
 
 uint8_t PickHere(uint8_t layer, uint8_t sig)
 {
-  ArmPose(POSE_HUB);
   if (!ArmPose(ScanPose(layer))) return PICK_FAIL;
   WaitMs(SCAN_SETTLE_MS);
   if (!CellHas(sig, layer)) {
     Con.println(F("verify failed"));
     return PICK_NOT_SEEN;
   }
-  float moved = 0;
-  bool centered = CenterOnBlock(sig, layer, moved);
-  gLateralMm += moved;
-  if (!centered) return PICK_FAIL;
-  ArmPose(POSE_HUB);
+  if (CENTER_ENABLE) {
+    float moved = 0;
+    bool centered = CenterOnBlock(sig, layer, moved);
+    gLateralMm += moved;
+    if (!centered) return PICK_FAIL;
+  }
   return GripSequence(layer, sig) ? PICK_OK : PICK_FAIL;
 }
 

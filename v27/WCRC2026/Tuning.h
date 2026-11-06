@@ -54,7 +54,6 @@ const int PSD_STORAGE_DETECT_ADC = 150;
 const float STORAGE_APPROACH_MAX_MM = 300;
 const int PSD_STORAGE_FR_ADC = 308;
 const int PSD_STORAGE_L1_FR_ADC = 308;
-const float PICK_FWD_MM = -10;
 const int PSD_STORAGE_COL1_SL_ADC = 258;
 const float STORAGE_COL_PITCH_MM = 72;
 
@@ -99,6 +98,7 @@ const int16_t CAM_COLUMN_HALF_WIDTH_PX = 45;
 const int16_t SCAN_Y_MIN_PX[3] = { 60, 60, 60 };
 const int16_t SCAN_Y_MAX_PX[3] = { 190, 185, 172 };
 
+const bool CENTER_ENABLE = false;
 const int16_t CENTER_TOL_PX = 4;
 const float CENTER_MM_PER_PX = 0.3;
 const float CENTER_GAIN = 0.8;
