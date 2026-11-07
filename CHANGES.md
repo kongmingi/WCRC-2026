@@ -6,6 +6,12 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T5 (T4 개선, T4 유지)
+- 스케치 1개(`T5/Mission2B`)에 강사님 경기 + 우리 콘솔 명령 (help pose free lock jN arm grip p move fr sl psd check t1~t7), 새 명령 save del list ours sr rot turn w wf baud, t5 3 N(열 이동), t4 색(찾아 집기)
+- SW1 또는 t7 = 강사님 전체 미션. 미션 배정은 missionAssignments 직접 입력 (order/zone 명령 없음)
+- 오류·종료 시 멈추지 않고 콘솔로 복귀 (gameOver)
+- 밑동 오프셋 1034 (정면 1013), 그리퍼 740 / 250, ours = v28 자세 (za 는 예전 밑동 기준 380 으로 변환, zb 없음)
+
 ## v28 (v27 개선, v27 유지)
 - 밑동 정면 1013 기준으로 다시 잡은 값: travel { -14, 1660, 4106, 1230 }, order·scan·pa·pg 밑동 1013 고정
 - 코드 변경 없음 (Tuning.h 만)
