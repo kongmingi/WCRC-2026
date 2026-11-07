@@ -6,6 +6,11 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T16 (T15 개선, T15 유지)
+- Zone B 복귀: 뒤로 366 → 오른쪽 90° → 앞으로 139 → 오른쪽 90° → 2열 맞춤(FR 304 + 비틀림 -5) → 왼쪽 70 → 1열 FR 304 (강사님 FR 194·SR 275·SL 200 맞춤 뺌)
+- Tuning: B_RETURN_TURN1/2_ADJ_DEG 0, mm_F_DROPBOX_B_to_CELL2 = 67 + 75 - 3
+- Zone B 값: 1열 왼쪽 회전 뒤 300 / -2, Zone B 정면 554 / -29, zb1~8
+
 ## T15 (T14 개선, T14 유지)
 - A1 에 놓을 때만 뒤로 mm_B_ZONE_A1(10) → 놓기 → 앞으로 10
 - Zone A 놓은 뒤 복귀: 이동 자세 → SL 607 → 벽 맞춤 → 오른쪽 123 → 1열 FR 304 (t5 3 끝부분과 같음, ReturnToCell1FromDropside)
