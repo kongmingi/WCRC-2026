@@ -6,6 +6,11 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T4 (T3 개선, T3 유지)
+- 1번 관절 오프셋 `ARM_DXL_1_OFFSET` 0 → 380 (우리 로봇 정면 1667 → 2047), Mission2B·Tool 둘 다
+- Tool `ours`: v27 팔 자세 23개를 강사님 오프셋 { 380, 238, 799, 0 } 으로 변환해 EEPROM 저장 (B 19~26 없음)
+- 4·34 travel, 27 order, 33/32/31 scan1~3, 8·9·10 / 5·6·7 / 28·29·30 = pa·pg·pa (1~3), 11~18 za1~8
+
 ## T3 (T2 개선, T2 유지)
 - 도구 6개를 `T3/Tool/Tool.ino` 하나로 합침, 짧은 명령 (r t p s x l o c g psd cam f b lf rt rl rr fa sa ra ma k d w wf wb wl wr id baud)
 - 자세를 명령 `s N` 으로 EEPROM 에 바로 저장 (writeEEPROM 표 복붙 불필요, 형식 같음)
