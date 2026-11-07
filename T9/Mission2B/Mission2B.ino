@@ -1564,8 +1564,8 @@ void ArriveCell1()
   delay( 1000 );
   lastCheckedLayerPoseId = 0;
   DriveDistanceSmoothWithInternalAcceleration( dxl, mm_F_MISSION_to_DROPBOX, MOVE_FORWARD, MOVE_MM_PER_SEC );
-  PerformMoveRotateAlign( PSD_SEARCH_WALL_AVG, PSD_SEARCH_WALL_TOLERANCE, PSD_SEARCH_WALL_TOLERANCE, PSD_SEARCH_WALL_ROT_ADJUST );
   PerformLeftMoveAlign( PSD_DROPBOXA_SEARCH_SL, PSD_MISSION_MOV_TOLERANCE );
+  PerformMoveRotateAlign( PSD_SEARCH_WALL_AVG, PSD_SEARCH_WALL_TOLERANCE, PSD_SEARCH_WALL_TOLERANCE, PSD_SEARCH_WALL_ROT_ADJUST );
   DriveDistanceSmoothWithInternalAcceleration( dxl, mm_R_DROPBOX_to_CELL1, MOVE_RIGHTWARD, SEARCH_MM_PER_SEC );
   curCol = 1;
   AlignAtColumn( 1 );
