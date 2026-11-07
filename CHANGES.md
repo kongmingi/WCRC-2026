@@ -6,6 +6,11 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T9 (T8 개선, T8 유지)
+- t5 2 / 경기: 순서 읽기 자세 = 출발 자세(34, POSE_TRAVEL 그대로), 뒤로 20
+- t5 3 / 경기: 전진 → 앞쪽 벽 맞춤(PSD_SEARCH_WALL_AVG 190, FR-FL 0, 허용 3) → 탐색선 SL 607 ×2 → 오른쪽 → 1열 FR
+- pa3 { 1014, 1534, 4117, 1549 }
+
 ## T8 (T7 버그 수정, T7 폴더 삭제)
 - p travel = 출발 자세(34, 밑동 그대로), save travel 은 4·34 같이. 순서 읽기(27) = POSE_ORDER_VIEW 로 분리
 - t5 2 / 경기: 왼쪽 → 뒤로 mm_B_OBSTACLE_to_MISSION → SL
