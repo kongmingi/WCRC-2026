@@ -6,6 +6,11 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T15 (T14 개선, T14 유지)
+- A1 에 놓을 때만 뒤로 mm_B_ZONE_A1(10) → 놓기 → 앞으로 10
+- Zone A 놓은 뒤 복귀: 이동 자세 → SL 607 → 벽 맞춤 → 오른쪽 123 → 1열 FR 304 (t5 3 끝부분과 같음, ReturnToCell1FromDropside)
+- (T14 에서 이어짐) POSE_CARRY, za1~8, 놓는 거리 130, 놓는 SL 611
+
 ## T14 (T13 개선, T13 유지)
 - 운반 자세 분리: POSE_CARRY { -11, 1488, 4447, 1498 } = 4번 (집은 뒤·Zone 이동, 밑동은 경기 중 정면/왼쪽 강제). 출발·순서 읽기는 POSE_TRAVEL 그대로
 - 콘솔: p carry / save carry 추가, save travel 은 travel 만 바꿈, list 에 travel·carry 둘 다
