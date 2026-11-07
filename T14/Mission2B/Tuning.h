@@ -89,7 +89,7 @@ const float mm_R_CELL3_to_CELL4 = 70;
 const float mm_L_CELL4_to_CELL3 = mm_R_CELL3_to_CELL4 - 3;
 const float mm_L_CELL3_to_CELL2 = mm_R_CELL2_to_CELL3;
 const float mm_L_CELL2_to_CELL1 = mm_R_CELL1_to_CELL2;
-const float mm_L_CELL1_to_DROPSIDE = 124;
+const float mm_L_CELL1_to_DROPSIDE = 130;
 const float mm_R_DROPSIDE_to_CELL1 = mm_L_CELL1_to_DROPSIDE;
 const float mm_B_DROPBAX_to_FINISH = 1320;
 const float mm_F_TO_DROPBOX_B = 366;
@@ -144,8 +144,8 @@ const Pose POSE_PICK_APPROACH[3] = { { 1013, 1765, 5118, 2728 }, { 1013, 1489, 4
 const Pose POSE_PICK_GRIP[3]     = { { 1013, 2086, 4793, 2726 }, { 1013, 1855, 4510, 2260 }, { 1014, 1910, 3971, 1777 } };
 
 const Pose POSE_ZONE_A[8] = {
-  { 230, 2321, 3889, 1989 }, { 341, 2125, 4140, 1943 }, { 503, 2045, 4250, 1943 }, { 681, 2017, 4257, 1942 },
-  { 140, 2117, 4260, 2075 }, { 267, 1682, 4613, 2080 }, { 472, 1621, 4748, 2080 }, { 729, 1642, 4687, 2076 },
+  { -457, 2489, 3497, 1608 }, { -342, 2344, 3434, 1301 }, { -213, 2202, 3587, 1213 }, { -18, 2145, 3667, 1218 },
+  { -548, 2267, 3714, 1506 }, { -438, 2020, 4072, 1527 }, { -272, 1800, 4368, 1574 }, { -35, 1595, 4526, 1582 },
 };
 const Pose POSE_ZONE_B[8] = {
   { -594, 2726, 3225, 1857 }, { -469, 2690, 3225, 1673 }, { -320, 2701, 3226, 1674 }, { -184, 2694, 3225, 1675 },
