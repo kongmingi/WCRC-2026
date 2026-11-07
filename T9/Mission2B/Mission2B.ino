@@ -95,6 +95,7 @@ uint8_t lastCheckedLayerPoseId = 0;
 
 int16_t slPSD, valPSD;
 bool gameOver = false;
+int camLayer = 1;
 int curCol = 0;
 
 
@@ -689,6 +690,7 @@ bool RunStorageLayerPose( uint8_t poseId, int32_t poseTimeMs )
 
   delay( poseTimeMs );
   lastCheckedLayerPoseId = poseId;
+  for( uint8_t k = 0; k < 3; k++ ) if( storageSearchPoseIds[k] == poseId ) camLayer = k;
   return true;
 }
 
@@ -783,7 +785,7 @@ int CamFindBlockAndPickup( int blockIndex, int columnNo ) // MODIFIED
     }
 
 #if RUN_CAM_X_ALIGN  // TODO-01 구현: 최대 3번 반복, 실패하면 움직인 합계만큼 되돌아감
-    float dsxm = (pos.x - PIXY_SET_POINT_X) * SETPOINT_X_PX_TO_MM;
+    float dsxm = (pos.x - PIXY_SET_POINT_X[layer - 1]) * SETPOINT_X_PX_TO_MM;
     float movedMm = 0.0f;
     bool seen = true;
 
@@ -797,7 +799,7 @@ int CamFindBlockAndPickup( int blockIndex, int columnNo ) // MODIFIED
         seen = false;
         break;
       }
-      dsxm = (pos.x - PIXY_SET_POINT_X) * SETPOINT_X_PX_TO_MM;
+      dsxm = (pos.x - PIXY_SET_POINT_X[layer - 1]) * SETPOINT_X_PX_TO_MM;
     }
 
     if( ! seen || fabs(dsxm) > PIXY_TOLERANCE_MM )
@@ -1433,6 +1435,7 @@ bool PlayPose( uint8_t id, int ms )
   RunManipulatorPoseWithPoseDataInEEPROM( dxl, id, ms, CenterJ1( id ) ? 0.0 : -360.0 );
   delay( ms );
   lastCheckedLayerPoseId = 0;
+  for( uint8_t k = 0; k < 3; k++ ) if( storageSearchPoseIds[k] == id ) camLayer = k;
   return true;
 }
 
@@ -1494,7 +1497,7 @@ void SensorMonitor()
         out.print( F(" y ") ); out.print( y );
         out.print( F(" w ") ); out.print( pixy.ccc.blocks[i].m_width );
         out.print( F(" h ") ); out.print( pixy.ccc.blocks[i].m_height );
-        out.print( F(" dx ") ); out.print( x - PIXY_SET_POINT_X );
+        out.print( F(" dx ") ); out.print( x - PIXY_SET_POINT_X[camLayer] );
         out.println( in ? F(" IN") : F(" out") );
       }
     } else {
@@ -1583,7 +1586,7 @@ int PickLayerColor( int layer, int color )
   if( RunStorageLayerPose( storageSearchPoseIds[layer - 1], MOVE_LAYER_POSE_TIME ) ) {
     delay( LAYER_POSE_SETTLE_MS );
     if( CamFindBlockAndGetStablePosition( 0, &pos ) ) {
-      float dsxm = (pos.x - PIXY_SET_POINT_X) * SETPOINT_X_PX_TO_MM;
+      float dsxm = (pos.x - PIXY_SET_POINT_X[layer - 1]) * SETPOINT_X_PX_TO_MM;
       float movedMm = 0.0f;
       bool seen = true;
       for( int t = 0; t < CAM_X_ALIGN_MAX_TRY && fabs(dsxm) > PIXY_TOLERANCE_MM; t++ ) {
@@ -1592,7 +1595,7 @@ int PickLayerColor( int layer, int color )
         movedMm += dsxm;
         delay( 100 );
         if( ! CamFindBlockAndGetStablePosition( 0, &pos ) ) { seen = false; break; }
-        dsxm = (pos.x - PIXY_SET_POINT_X) * SETPOINT_X_PX_TO_MM;
+        dsxm = (pos.x - PIXY_SET_POINT_X[layer - 1]) * SETPOINT_X_PX_TO_MM;
       }
       if( seen && fabs(dsxm) <= PIXY_TOLERANCE_MM ) {
         PickBlockAtLayer( layer );
