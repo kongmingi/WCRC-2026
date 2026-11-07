@@ -6,6 +6,13 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T3 (T2 개선, T2 유지)
+- 도구 6개를 `T3/Tool/Tool.ino` 하나로 합침, 짧은 명령 (r t p s x l o c g psd cam f b lf rt rl rr fa sa ra ma k d w wf wb wl wr id baud)
+- 자세를 명령 `s N` 으로 EEPROM 에 바로 저장 (writeEEPROM 표 복붙 불필요, 형식 같음)
+- 바퀴 비율을 실행 중 배열(`wheelRate`)로 사용 → Tool 에서 `wf` 등으로 바로 바꿔 시험. 기본값은 그대로 Mobilebase.h
+- 블루투스(Serial2)로도 Tool 명령 가능
+- Mission2B 동작·값 변경 없음
+
 ## v27 (v26 수정, v26 폴더 삭제)
 - t3 집기 순서 단순화: scan(확인) → 그리퍼 열기 → pa → pg → 닫기 → pa → travel
 - hub 전부 삭제(집기), 뒤로 10mm 삭제(`PICK_FWD_MM` 삭제)
