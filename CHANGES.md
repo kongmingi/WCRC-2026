@@ -6,6 +6,9 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## 정리 (main 은 T9 부터)
+- v6~v28, T1~T8, 옛날 PDF·계획 문서는 `archive` 가지로 옮김 (GitHub 가지 선택에서 archive)
+
 ## T12 (T11 개선, T11 유지)
 - t5 1 / 경기: 장애물 앞 FL·FR 로 앞뒤+비틀림 (PSD_OBSTACLE_AVG 562, PSD_OBSTACLE_ROT_ADJUST -25, 허용 3)
 - 오른쪽 이동 129 → 123
