@@ -6,6 +6,13 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T6 (T5 개선, T5 유지)
+- `Tuning.h` 추가: 스위치, 미션 배정, 속도, 바퀴 비율(WHEEL_RATIO_*), PSD, 거리, 카메라, 그리퍼(GRIP_OPEN/CLOSE), 팔 범위·오프셋, 팔 자세 전부
+- 팔 자세: v28 Tuning.h 값 그대로(우리 좌표), EEPROM 대신 Tuning.h 에서 읽어 강사님 좌표로 변환 (ARM_OFFSET, JOINT_MIN/MAX 창)
+- 이동·PSD 위치 잡기 값은 강사님 값 그대로
+- 콘솔: pose/j1/arm 이 Tuning.h 숫자로 표시·입력, save = 전원 끄기 전까지 + Tuning.h 에 옮길 줄 출력, list, p hub. ours/del 삭제
+- Devices/Mobilebase/Manipulator 는 값만 Tuning.h 에서 읽게 변경, 동작 동일
+
 ## T5 (T4 개선, T4 유지)
 - 스케치 1개(`T5/Mission2B`)에 강사님 경기 + 우리 콘솔 명령 (help pose free lock jN arm grip p move fr sl psd check t1~t7), 새 명령 save del list ours sr rot turn w wf baud, t5 3 N(열 이동), t4 색(찾아 집기)
 - SW1 또는 t7 = 강사님 전체 미션. 미션 배정은 missionAssignments 직접 입력 (order/zone 명령 없음)
