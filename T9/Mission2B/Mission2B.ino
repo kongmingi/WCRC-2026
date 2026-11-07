@@ -1566,12 +1566,7 @@ void ArriveCell1()
   DriveDistanceSmoothWithInternalAcceleration( dxl, mm_F_MISSION_to_DROPBOX, MOVE_FORWARD, MOVE_MM_PER_SEC );
   PerformMoveRotateAlign( PSD_SEARCH_WALL_AVG, PSD_SEARCH_WALL_TOLERANCE, PSD_SEARCH_WALL_TOLERANCE, PSD_SEARCH_WALL_ROT_ADJUST );
   PerformLeftMoveAlign( PSD_DROPBOXA_SEARCH_SL, PSD_MISSION_MOV_TOLERANCE );
-  delay( 50 );
-  PerformLeftMoveAlign( PSD_DROPBOXA_SEARCH_SL, PSD_MISSION_MOV_TOLERANCE );
-  pixy.setLamp( CAM_LAMP_ON, CAM_LAMP_ON );
-  DriveDistanceSmoothWithInternalAcceleration( dxl, mm_R_DROPBOX_to_CELL1, MOVE_RIGHTWARD, SEARCH_MM_PER_SEC );
-  curCol = 1;
-  AlignAtColumn( 1 );
+  PrintPsd();
 }
 
 int PickLayerColor( int layer, int color )

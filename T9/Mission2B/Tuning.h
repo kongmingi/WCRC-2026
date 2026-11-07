@@ -45,7 +45,7 @@ const uint8_t PSD_SAMPLES = 11;
 const float PSD_MOVE_CONTROL_RATIO = 0.01;
 const float PSD_ROTATE_CONTROL_RATIO = 0.015;
 const uint32_t ALIGN_TIMEOUT = 3000;
-const int MAX_MOV_ALIGN_REPEAT_COUNT = 3;
+const int MAX_MOV_ALIGN_REPEAT_COUNT = 10;
 const int MAX_MOV_ALIGN_1TIME_RETRY = 5;
 const int ALIGN_OUT_REPEAT_DELAY_MS = 10;
 
