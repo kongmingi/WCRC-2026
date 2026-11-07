@@ -1248,6 +1248,7 @@ void RunMission()
   PauseIfStepMode( F("leftward to Mission Zone") );
 
   DriveDistanceSmoothWithInternalAcceleration( dxl, mm_L_OBSTACLE_to_MISSION, MOVE_LEFTWARD, SIDE_MM_PER_SEC );
+  DriveDistanceSmoothWithInternalAcceleration( dxl, mm_B_OBSTACLE_to_MISSION, MOVE_BACKWARD, MOVE_MM_PER_SEC );
 
   PerformLeftMoveAlign( PSD_MISSION_SL, PSD_MISSION_MOV_TOLERANCE );
 
@@ -1279,10 +1280,9 @@ void RunMission()
 
   PauseIfStepMode( F("long forward to storage line") );
 
-  if( ! RunStorageLayerPose(GetFirstStorageSearchPoseId(), 1000) ) {
-    StopForMissionError(F("Cannot prepare initial CELL1 search pose. Stopped."));
-    return;
-  }
+  RunManipulatorPoseWithPoseDataInEEPROM( dxl, FRONT_MOVE, 1000, -360.0 );
+  delay( 1000 );
+  lastCheckedLayerPoseId = 0;
 
   DriveDistanceSmoothWithInternalAcceleration( dxl, mm_F_MISSION_to_DROPBOX, MOVE_FORWARD, MOVE_MM_PER_SEC );
 
@@ -1336,7 +1336,7 @@ Dual out;
 int PoseIdByName( const char* n )
 {
   if( isDigit( n[0] ) ) { int v = atoi( n ); return v >= 1 && v <= MANIPULATOR_POSE_ID_MAX_CNT ? v : 0; }
-  if( ! strcmp( n, "travel" ) ) return STORAGE_SEARCH;
+  if( ! strcmp( n, "travel" ) ) return START_POSE;
   if( ! strcmp( n, "order" ) ) return FIND_MISSION_1SHOT;
   size_t len = strlen( n );
   if( len < 3 ) return 0;
@@ -1559,7 +1559,9 @@ void GoColumn( int target )
 
 void ArriveCell1()
 {
-  if( ! RunStorageLayerPose( GetFirstStorageSearchPoseId(), 1000 ) ) return;
+  RunManipulatorPoseWithPoseDataInEEPROM( dxl, FRONT_MOVE, 1000, -360.0 );
+  delay( 1000 );
+  lastCheckedLayerPoseId = 0;
   DriveDistanceSmoothWithInternalAcceleration( dxl, mm_F_MISSION_to_DROPBOX, MOVE_FORWARD, MOVE_MM_PER_SEC );
   PerformLeftMoveAlign( PSD_DROPBOXA_SEARCH_SL, PSD_MISSION_MOV_TOLERANCE );
   delay( 50 );
@@ -1663,6 +1665,11 @@ void SelfCheck()
   out.print( F("motors: ") );
   for( uint8_t i = 0; i < n; i++ ) { out.print( ids[i] ); out.print( ' ' ); }
   out.println();
+  for( uint8_t id = 1; id <= 4; id++ ) {
+    out.print( F("V") ); out.print( id ); out.print( ' ' );
+    out.print( dxl.readControlTableItem( PRESENT_INPUT_VOLTAGE, id ) / 10.0, 1 );
+    out.print( id < 4 ? F("  ") : F("\n") );
+  }
   out.println( pixy.getVersion() >= 0 ? F("pixy ok") : F("pixy NO RESPONSE") );
   PrintPsd();
   out.println( AreMissionAssignmentsValid() ? F("missionAssignments ok") : F("missionAssignments INVALID") );
@@ -1748,7 +1755,7 @@ void Handle( char* line )
     else if( ReadOurs( v ) ) {
       Pose np = { (int16_t)v[0], (int16_t)v[1], (int16_t)v[2], (int16_t)v[3] };
       *PoseSlot( id ) = np;
-      if( id == STORAGE_SEARCH ) *PoseSlot( START_POSE ) = np;
+      if( id == START_POSE ) *PoseSlot( STORAGE_SEARCH ) = np;
       for( uint8_t k = 0; k < 3; k++ ) if( id == pickApproachPoseIds[k] ) *PoseSlot( pickOutPoseIds[k] ) = np;
       out.print( F("saved (until power off), copy to Tuning.h: ") );
       PrintPoseLine( a1, np );
@@ -1790,6 +1797,7 @@ void Handle( char* line )
       RunManipulatorPoseWithPoseDataInEEPROM( dxl, FIND_MISSION_1SHOT, 600, -360.0 );
       lastCheckedLayerPoseId = 0;
       DriveDistanceSmoothWithInternalAcceleration( dxl, mm_L_OBSTACLE_to_MISSION, MOVE_LEFTWARD, SIDE_MM_PER_SEC );
+      DriveDistanceSmoothWithInternalAcceleration( dxl, mm_B_OBSTACLE_to_MISSION, MOVE_BACKWARD, MOVE_MM_PER_SEC );
       PerformLeftMoveAlign( PSD_MISSION_SL, PSD_MISSION_MOV_TOLERANCE );
       pixy.setLamp( CAM_LAMP_ON, CAM_LAMP_ON );
       delay( 150 );
@@ -1863,7 +1871,7 @@ void setup()
   ChangeMobilebaseMode2ExtendedPositionControlWithTimeBasedProfileMode( dxl );
 
   ShowColor( 0, 0, 0 );
-  out.println( F("< T7 > help | SW1 = t7") );
+  out.println( F("< T8 > help | SW1 = t7") );
   SelfCheck();
   Beeps( 1 );
 }

@@ -131,6 +131,7 @@ static void InitPoseTable()
 {
   memset( poseTable, 0, sizeof(poseTable) );
   poseTable[4] = POSE_TRAVEL;
+  poseTable[3] = POSE_DRIVE;
   poseTable[34] = POSE_TRAVEL;
   poseTable[27] = POSE_ORDER_VIEW;
   const uint8_t scanId[3] = { 33, 32, 31 };
