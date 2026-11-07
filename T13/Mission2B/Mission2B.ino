@@ -1828,6 +1828,7 @@ void Handle( char* line )
     curCol = 0;
   }
   else if( ! strcmp( cmd, "t7" ) ) { RunMission(); curCol = 0; }
+  else if( ! strcmp( cmd, "col" ) && a1 && i1 >= 1 && i1 <= 4 ) { curCol = i1; out.print( F("column ") ); out.println( curCol ); }
   else if( ! strcmp( cmd, "w" ) ) PrintRates();
   else if( cmd[0] == 'w' && cmd[1] && ! cmd[2] && strchr( "fblr", cmd[1] ) ) {
     uint8_t d = strchr( "fblr", cmd[1] ) - "fblr";
