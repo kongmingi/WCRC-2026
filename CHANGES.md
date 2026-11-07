@@ -6,6 +6,12 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T17 (T16 개선, T16 유지)
+- 미션 순서: 왼쪽(orderl, 35) / 오른쪽(orderr, 36) 두 자세로 촬영, 칸 중심 x 6개에 블록이 걸치면 그 색 투표 (5프레임 중 3 이상)
+- 같은 색 붙은 블록, 화면 끝 옆 칸 블록 처리. 빈칸은 0 으로 출력 후 건너뜀
+- 출력 `[ORDER] slots: 1 2 3 4 5 6`
+- Tuning: POSE_ORDER_L/R, ORDER_SLOT_X, ORDER_Y_MIN/MAX, ORDER_FRAMES, ORDER_MIN_VOTES, ORDER_POSE_MS, ORDER_POSE_SETTLE_MS
+
 ## T16 (T15 개선, T15 유지)
 - Zone B 복귀: 뒤로 366 → 오른쪽 90° → 앞으로 139 → 오른쪽 90° → 2열 맞춤(FR 304 + 비틀림 -5) → 왼쪽 70 → 1열 FR 304 (강사님 FR 194·SR 275·SL 200 맞춤 뺌)
 - Tuning: B_RETURN_TURN1/2_ADJ_DEG 0, mm_F_DROPBOX_B_to_CELL2 = 67 + 75 - 3
