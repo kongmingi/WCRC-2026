@@ -12,20 +12,32 @@ DYNAMIXEL::InfoSyncWriteInst_t sw_arm_position_infos; // syncwrite 정보 인스
 DYNAMIXEL::XELInfoSyncWrite_t info_joint_position_xels_sw[ARM_DXL_ID_CNT];
 
 
+int32_t ToWindow( int32_t raw, uint8_t i )
+{
+  int32_t lo = ((int32_t)JOINT_MIN[i] + JOINT_MAX[i]) / 2 - 2048;
+  int32_t v = (raw - lo) % 4096;
+  if( v < 0 ) v += 4096;
+  return lo + v;
+}
+
 void setManipulatorForwardMoveWithMotorValueForSyncWrite( Dynamixel2Arduino& dxl,
                                       int32_t mv1, int32_t mv2, int32_t mv3, int32_t mv4, int32_t operatingTime)
-{                                                           
-  sw_joint_position_data[0].goal_position = constrain(mv1, ARM_DXL_1_POSITION_MIN, ARM_DXL_1_POSITION_MAX);
-  sw_joint_position_data[0].profile_velocity = operatingTime;
-  sw_joint_position_data[1].goal_position = constrain(mv2, ARM_DXL_2_POSITION_MIN, ARM_DXL_2_POSITION_MAX);
-  sw_joint_position_data[1].profile_velocity = operatingTime;
-  sw_joint_position_data[2].goal_position = constrain(mv3, ARM_DXL_3_POSITION_MIN, ARM_DXL_3_POSITION_MAX);
-  sw_joint_position_data[2].profile_velocity = operatingTime;
-  sw_joint_position_data[3].goal_position = constrain(mv4, ARM_DXL_4_POSITION_MIN, ARM_DXL_4_POSITION_MAX);
-  sw_joint_position_data[3].profile_velocity = operatingTime;
-  
+{
+  const int32_t target[4] = { mv1, mv2, mv3, mv4 };
+  for( uint8_t i = 0; i < ARM_DXL_ID_CNT; i++ ) {
+    int32_t raw = 0;
+    bool ok = false;
+    for( uint8_t k = 0; k < 3 && ! ok; k++ ) {
+      raw = dxl.readControlTableItem( PRESENT_POSITION, ARM_DXL_IDS[i] );
+      ok = dxl.getLastLibErrCode() == DXL_LIB_OK;
+    }
+    if( ! ok ) return;
+    int32_t goal = constrain( target[i], (int32_t)JOINT_MIN[i], (int32_t)JOINT_MAX[i] );
+    sw_joint_position_data[i].goal_position = raw + (goal - ToWindow( raw, i ));
+    sw_joint_position_data[i].profile_velocity = operatingTime;
+  }
+
   sw_arm_position_infos.is_info_changed = true;
-  
 
   int count = 0;
   while (!dxl.syncWrite(&sw_arm_position_infos)) {
@@ -41,45 +53,22 @@ bool InitManipulator( Dynamixel2Arduino& dxl )
   if ( ! FindManipulatorServos(dxl) )
     return false;
   
-  for (int i = 0 ; i < ARM_DXL_ID_CNT ; i++)
-  {
-    // 토크 끄기
-    dxl.writeControlTableItem(TORQUE_ENABLE, ARM_DXL_IDS[i], TORQUE_OFF);
-  
-    // 드라이브 모드 설정
-    // 방향은 Reverse Mode, Profile Configuration은 Time-based Profile
-    dxl.writeControlTableItem(DRIVE_MODE, ARM_DXL_IDS[i],
-                              REVERSE_MODE + TIME_BASED_PROFILE);
-    // 오퍼레이팅 모드를 위치 제어 모드로 설정
-    dxl.writeControlTableItem(OPERATING_MODE, ARM_DXL_IDS[i], POSITION_CONTROL_MODE);
-
-    switch (ARM_DXL_IDS[i]) { // 모터에 따라 position limit, homing offset 설정
-      case ARM_DXL_ID_1:
-        dxl.writeControlTableItem(MIN_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_1_POSITION_MIN);
-        dxl.writeControlTableItem(MAX_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_1_POSITION_MAX);
-        dxl.writeControlTableItem(HOMING_OFFSET,      ARM_DXL_IDS[i], ARM_DXL_1_OFFSET);
-        break;
-      case ARM_DXL_ID_2:
-        dxl.writeControlTableItem(MIN_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_2_POSITION_MIN);
-        dxl.writeControlTableItem(MAX_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_2_POSITION_MAX);
-        dxl.writeControlTableItem(HOMING_OFFSET,      ARM_DXL_IDS[i], ARM_DXL_2_OFFSET);
-        break;
-      case ARM_DXL_ID_3:
-        dxl.writeControlTableItem(MIN_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_3_POSITION_MIN);
-        dxl.writeControlTableItem(MAX_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_3_POSITION_MAX);
-        dxl.writeControlTableItem(HOMING_OFFSET,      ARM_DXL_IDS[i], ARM_DXL_3_OFFSET);
-        break;
-      case ARM_DXL_ID_4:
-        dxl.writeControlTableItem(MIN_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_4_POSITION_MIN);
-        dxl.writeControlTableItem(MAX_POSITION_LIMIT, ARM_DXL_IDS[i], ARM_DXL_4_POSITION_MAX);
-        dxl.writeControlTableItem(HOMING_OFFSET,      ARM_DXL_IDS[i], ARM_DXL_4_OFFSET);
-        break;
-    }
-
-    // 토크 켜기
-    dxl.writeControlTableItem(TORQUE_ENABLE, ARM_DXL_IDS[i], TORQUE_ON);
+  for( int i = 0; i < ARM_DXL_ID_CNT; i++ ) {
+    dxl.writeControlTableItem( TORQUE_ENABLE, ARM_DXL_IDS[i], TORQUE_OFF );
+    dxl.writeControlTableItem( DRIVE_MODE, ARM_DXL_IDS[i], REVERSE_MODE + TIME_BASED_PROFILE );
+    dxl.writeControlTableItem( OPERATING_MODE, ARM_DXL_IDS[i], EXTENDED_POSITION_CONTROL_MODE );
+    dxl.writeControlTableItem( HOMING_OFFSET, ARM_DXL_IDS[i], 0 );
   }
-  
+  for( int i = 0; i < ARM_DXL_ID_CNT; i++ ) dxl.reboot( ARM_DXL_IDS[i] );
+  delay( 800 );
+  for( int i = 0; i < ARM_DXL_ID_CNT; i++ ) {
+    dxl.writeControlTableItem( POSITION_P_GAIN, ARM_DXL_IDS[i], ARM_P_GAIN );
+    dxl.writeControlTableItem( POSITION_I_GAIN, ARM_DXL_IDS[i], ARM_I_GAIN );
+    int32_t raw = dxl.readControlTableItem( PRESENT_POSITION, ARM_DXL_IDS[i] );
+    dxl.writeControlTableItem( GOAL_POSITION, ARM_DXL_IDS[i], raw );
+    dxl.writeControlTableItem( TORQUE_ENABLE, ARM_DXL_IDS[i], TORQUE_ON );
+  }
+
   // manipulator sync write 준비
   sw_arm_position_infos.packet.p_buf = nullptr; // nullptr을 전달하면 내부 버퍼를 사용
   sw_arm_position_infos.packet.is_completed = false; // false로 초기화
@@ -168,18 +157,6 @@ Pose* PoseSlot( uint8_t id )
   return &poseTable[id];
 }
 
-int32_t OursToMotor( int32_t v, uint8_t i )
-{
-  return ((v + ARM_OFFSET[i]) % 4096 + 4096) % 4096;
-}
-
-int32_t MotorToOurs( int32_t v, uint8_t i )
-{
-  int32_t lo = ((int32_t)JOINT_MIN[i] + JOINT_MAX[i]) / 2 - 2048;
-  int32_t r = ((v - ARM_OFFSET[i] - lo) % 4096 + 4096) % 4096;
-  return lo + r;
-}
-
 ManipulatorPose ReadManipulatorPresentPoseToEEPROM(uint8_t id)
 {
   ManipulatorPose manipulatorPose = {};
@@ -187,10 +164,10 @@ ManipulatorPose ReadManipulatorPresentPoseToEEPROM(uint8_t id)
   if( p && ( p->j1 || p->j2 || p->j3 || p->j4 ) ) {
     manipulatorPose.isTherePoseData = 1;
     manipulatorPose.id = id;
-    manipulatorPose.manipulatorMotor1Value = OursToMotor( p->j1, 0 );
-    manipulatorPose.manipulatorMotor2Value = OursToMotor( p->j2, 1 );
-    manipulatorPose.manipulatorMotor3Value = OursToMotor( p->j3, 2 );
-    manipulatorPose.manipulatorMotor4Value = OursToMotor( p->j4, 3 );
+    manipulatorPose.manipulatorMotor1Value = p->j1;
+    manipulatorPose.manipulatorMotor2Value = p->j2;
+    manipulatorPose.manipulatorMotor3Value = p->j3;
+    manipulatorPose.manipulatorMotor4Value = p->j4;
   }
   return manipulatorPose;
 }
@@ -205,7 +182,7 @@ ManipulatorPose RunManipulatorPoseWithPoseDataInEEPROM( Dynamixel2Arduino& dxl,
   {
     int32_t manipulatorMotor1Value = (motor1Angle == -360.0
                                       ? manipulatorPose.manipulatorMotor1Value
-                                      : map( constrain( round(motor1Angle * 100), -10000, 10000 ),  -18000, 18000, 0, 4095 ) );
+                                      : J1_FRONT + (int32_t) round( constrain( motor1Angle, -100.0, 100.0 ) * 4096.0 / 360.0 ));
 
     setManipulatorForwardMoveWithMotorValueForSyncWrite( dxl, manipulatorMotor1Value,
                                                          manipulatorPose.manipulatorMotor2Value,

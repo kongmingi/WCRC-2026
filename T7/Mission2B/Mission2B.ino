@@ -1404,14 +1404,14 @@ void SetArmTorque( bool on )
 bool ReadOurs( int32_t* v )
 {
   if( ! ReadArm( v ) ) return false;
-  for( uint8_t i = 0; i < 4; i++ ) v[i] = MotorToOurs( v[i], i );
+  for( uint8_t i = 0; i < 4; i++ ) v[i] = ToWindow( v[i], i );
   return true;
 }
 
 void MoveOurs( const int32_t* v, int ms )
 {
   if( ! ArmTorqueOn() ) SetArmTorque( true );
-  setManipulatorForwardMoveWithMotorValueForSyncWrite( dxl, OursToMotor( v[0], 0 ), OursToMotor( v[1], 1 ), OursToMotor( v[2], 2 ), OursToMotor( v[3], 3 ), ms );
+  setManipulatorForwardMoveWithMotorValueForSyncWrite( dxl, v[0], v[1], v[2], v[3], ms );
   delay( ms + 50 );
   lastCheckedLayerPoseId = 0;
 }
@@ -1863,7 +1863,7 @@ void setup()
   ChangeMobilebaseMode2ExtendedPositionControlWithTimeBasedProfileMode( dxl );
 
   ShowColor( 0, 0, 0 );
-  out.println( F("< T6 > help | SW1 = t7") );
+  out.println( F("< T7 > help | SW1 = t7") );
   SelfCheck();
   Beeps( 1 );
 }

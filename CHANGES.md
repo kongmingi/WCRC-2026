@@ -6,6 +6,12 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T7 (T6 버그 수정, T6 폴더 삭제)
+- T6 팔 값이 전부 틀어짐 (travel 이 -1010, 1206, 2244, 890 으로 읽힘): 강사님 위치 모드 + 오프셋으로 변환하는 방식이 이 로봇에서 안 맞음
+- 팔 구동을 우리 코드(v28)와 같게: 확장 위치 모드, 오프셋 0, 재부팅, 관절 창 계산, P/I 게인 1200/200 → Tuning.h 자세 숫자가 그대로 모터 값
+- 집기·운반 때 밑동 고정은 `J1_FRONT` 1013 기준 (강사님 0° = 정면, -90° = 1013 - 1024)
+- Tuning.h: ARM_OFFSET/ARM_POS_MIN/MAX 삭제, ARM_P_GAIN, ARM_I_GAIN, J1_FRONT 추가
+
 ## T6 (T5 개선, T5 유지)
 - `Tuning.h` 추가: 스위치, 미션 배정, 속도, 바퀴 비율(WHEEL_RATIO_*), PSD, 거리, 카메라, 그리퍼(GRIP_OPEN/CLOSE), 팔 범위·오프셋, 팔 자세 전부
 - 팔 자세: v28 Tuning.h 값 그대로(우리 좌표), EEPROM 대신 Tuning.h 에서 읽어 강사님 좌표로 변환 (ARM_OFFSET, JOINT_MIN/MAX 창)

@@ -10,19 +10,7 @@
 #define ARM_DXL_ID_3            0x07 // 매니퓰레이터 3번 모터 아이디
 #define ARM_DXL_ID_4            0x08 // 매니퓰레이터 4번 모터 아이디 (가장 위)
 
-#define ARM_DXL_1_POSITION_MIN  ARM_POS_MIN[0]
-#define ARM_DXL_1_POSITION_MAX  ARM_POS_MAX[0]
-#define ARM_DXL_2_POSITION_MIN  ARM_POS_MIN[1]
-#define ARM_DXL_2_POSITION_MAX  ARM_POS_MAX[1]
-#define ARM_DXL_3_POSITION_MIN  ARM_POS_MIN[2]
-#define ARM_DXL_3_POSITION_MAX  ARM_POS_MAX[2]
-#define ARM_DXL_4_POSITION_MIN  ARM_POS_MIN[3]
-#define ARM_DXL_4_POSITION_MAX  ARM_POS_MAX[3]
 
-#define ARM_DXL_1_OFFSET        ARM_OFFSET[0]
-#define ARM_DXL_2_OFFSET        ARM_OFFSET[1]
-#define ARM_DXL_3_OFFSET        ARM_OFFSET[2]
-#define ARM_DXL_4_OFFSET        ARM_OFFSET[3]
 
 
 // FinManipulatorServos 함수에서 찾을 모터 아이디들, 값이 중복 없이 정렬되어있어야 함
@@ -110,7 +98,6 @@ ManipulatorPose RunManipulatorPoseWithPoseDataInEEPROM( Dynamixel2Arduino& dxl,
                   uint8_t id, int32_t operatingTimeMillis, float motor1Angle = -360.0 );
 
 Pose* PoseSlot( uint8_t id );
-int32_t OursToMotor( int32_t v, uint8_t i );
-int32_t MotorToOurs( int32_t v, uint8_t i );
+int32_t ToWindow( int32_t raw, uint8_t i );
 
 #endif

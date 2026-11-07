@@ -120,9 +120,9 @@ const int DROP_INDEX_POS_TIME = 500;
 const int CHANGE_NEXT_POS_TIME = 500;
 
 
-const int16_t ARM_OFFSET[4] = { 1034, 238, 799, 0 };
-const int16_t ARM_POS_MIN[4] = { 0, 1024, 211, 722 };
-const int16_t ARM_POS_MAX[4] = { 4095, 3474, 2640, 3161 };
+const uint16_t ARM_P_GAIN = 1200;
+const uint16_t ARM_I_GAIN = 200;
+const int16_t J1_FRONT = 1013;
 
 const int16_t JOINT_MIN[4] = { -1500, 0, 2650, 0 };
 const int16_t JOINT_MAX[4] = { 2600, 4095, 5600, 4095 };
