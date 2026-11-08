@@ -6,6 +6,14 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T22 (팀원 코드 기준, T20 유지)
+- 원인: SL 607/611 이 PSD 최고점 평평한 구간(608~611, 약 15mm)이라 Zone A 앞 위치가 매번 달라짐 → 1열 dx 틀어짐
+- t5 3 / Zone A 복귀: SL 572(기울기 구간) → 벽 맞춤 → 오른쪽 115 → 1열
+- Zone A 갈 때: 좌진 기준 130 → 115, SL 572 → 왼쪽 7 → 놓기
+- t5 2 orderLeft 자세 대입 오타 수정 (orderRight 두 번 → orderLeft)
+- Tuning: PSD_DROPSIDE_REF_SL 572, mm_R_REF_to_CELL1 115, mm_L_REF_to_DROP 7
+- 그대로: t7 1열 도착(강사님 순서), Finish SL 611
+
 ## T20 (T19 개선, T19 유지)
 - 순서 읽기 ROI: 블록 중심이 박스 안일 때만 (orderL x 22~206 y 43~168, orderR x 84~316 y 92~185)
 - Tuning: ORDER_ROI[2][4] = { x최소, x최대, y최소, y최대 }
