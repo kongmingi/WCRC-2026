@@ -13,6 +13,7 @@
 - t5 2 orderLeft 자세 대입 오타 수정 (orderRight 두 번 → orderLeft)
 - Tuning: PSD_DROPSIDE_REF_SL 572, mm_R_REF_to_CELL1 115, mm_L_REF_to_DROP 7
 - 그대로: t7 1열 도착(강사님 순서), Finish SL 611
+- 열 간격(실측): 오른쪽 73 / 75 / 67, 왼쪽 67 / 75 / 70 숫자 고정, B 복귀 전진 139 숫자 고정
 
 ## T20 (T19 개선, T19 유지)
 - 순서 읽기 ROI: 블록 중심이 박스 안일 때만 (orderL x 22~206 y 43~168, orderR x 84~316 y 92~185)
