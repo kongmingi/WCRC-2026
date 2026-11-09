@@ -6,6 +6,10 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T29 (T28 개선, T28 유지)
+- 이동 시간 초과면 바퀴 즉시 정지(목표 취소) + `[MOVE] timeout` 출력, 전송 실패도 출력. Mobilebase.cpp
+- Tuning: 이동 속도 140 (MOBILEBASE_SPEED, MOVE/SIDE/SEARCH_MM_PER_SEC)
+
 ## T28 (T27 개선, T27 유지)
 - PSD 앞뒤+비틀림 동시 맞춤: 허용 밖인데 속도 10 미만이면 10으로 (멈춘 채 헛도는 문제). Mission2B.ino `RotateAlignFront2()`. 값 변경 없음
 
