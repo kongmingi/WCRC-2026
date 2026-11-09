@@ -64,8 +64,8 @@ const int PSD_DROPBOXA_DROP_SPEED = 100;
 const int PSD_STORAGE_FR = 304;
 const int PSD_STORAGE_MOV_TOLERANCE = 2;
 const int PSD_STORAGE_FRONT_AVG = 311;
-const int PSD_STORAGE_ROT_ADJUST = 8;
-const int PSD_STORAGE_ROT_TOLERANCE = 2;
+const int PSD_STORAGE_ROT_ADJUST = -8;
+const int PSD_STORAGE_ROT_TOLERANCE = 4;
 const int PSD_STORAGE_CELL2_SL = 200;
 const int PSD_STORAGE_CELL2_SL_TOLERANCE = 2;
 const int PSD_DROPBOX_B_FRONT_AVG = 591;
@@ -83,9 +83,9 @@ const float mm_L_OBSTACLE_to_MISSION = 350;
 const float mm_B_OBSTACLE_to_MISSION = 20;
 const float mm_F_MISSION_to_DROPBOX = 858;
 const float mm_R_DROPBOX_to_CELL1 = 123;
-const float mm_R_CELL1_to_CELL2 = 67;
-const float mm_R_CELL2_to_CELL3 = 68;
-const float mm_R_CELL3_to_CELL4 = 67;
+const float mm_R_CELL1_to_CELL2 = 70;
+const float mm_R_CELL2_to_CELL3 = 75;
+const float mm_R_CELL3_to_CELL4 = 70;
 const float mm_L_CELL4_to_CELL3 = mm_R_CELL3_to_CELL4 - 3;
 const float mm_L_CELL3_to_CELL2 = mm_R_CELL2_to_CELL3;
 const float mm_L_CELL2_to_CELL1 = mm_R_CELL1_to_CELL2;
@@ -140,7 +140,7 @@ const Pose POSE_HUB        = { 1623, 1350, 4852, 2039 };
 
 const Pose POSE_SCAN[3]      = { { 1013, 1838, 5138, 2559 }, { 1013, 1622, 4916, 2267 }, { 1013, 1565, 4366, 1648 } };
 const Pose POSE_PICK_APPROACH[3] = { { 1013, 1765, 5118, 2728 }, { 1013, 1489, 4642, 1971 }, { 1014, 1534, 4117, 1549 } };
-const Pose POSE_PICK_GRIP[3]     = { { 1013, 2086, 4793, 2726 }, { 1013, 1829, 4458, 2104 }, { 1013, 1852, 3940, 1643 } };
+const Pose POSE_PICK_GRIP[3]     = { { 1013, 2086, 4793, 2726 }, { 1013, 1829, 4458, 2104 }, { 1014, 1910, 3971, 1777 } };
 
 const Pose POSE_ZONE_A[8] = {
   { 230, 2321, 3889, 1989 }, { 341, 2125, 4140, 1943 }, { 503, 2045, 4250, 1943 }, { 681, 2017, 4257, 1942 },
