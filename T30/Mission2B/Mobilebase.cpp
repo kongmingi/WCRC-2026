@@ -279,11 +279,8 @@ void DriveDistanceSmoothWithInternalAcceleration( Dynamixel2Arduino& dxl,
       break;
   }
 
-  if (!commandSent) {
-    Serial.print(F("[MOVE] send fail dir ")); Serial.print(drivingDirection);
-    Serial.print(F(" mm ")); Serial.println(distance, 0);
-    return;
-  }
+  if (!commandSent)
+    return;  // 보내지 못한 명령의 도착을 기다리지 않고 미션 순서로 복귀
 
   // 3. 도착 대기. 초과 시 대기만 종료하며 모터 목표를 취소하지는 않음.
   const uint32_t waitStarted = millis();
@@ -291,12 +288,10 @@ void DriveDistanceSmoothWithInternalAcceleration( Dynamixel2Arduino& dxl,
   while (!CheckIfMobilebaseIsInPosition(dxl)) {
     yield();
     if (uint32_t(millis() - waitStarted) >= waitLimit) {
-      tone(BUZZER_PIN, 784, 100);
-      ChangeMobilebaseMode2VelocityControlMode(dxl);
-      SetMobileGoalVelocityForSyncWrite(dxl, 0, 0, 0, 0);
-      ChangeMobilebaseMode2ExtendedPositionControlWithTimeBasedProfileMode(dxl);
-      Serial.print(F("[MOVE] timeout, stopped. dir ")); Serial.print(drivingDirection);
-      Serial.print(F(" mm ")); Serial.println(distance, 0);
+      tone(BUZZER_PIN, 784, 100);  // 도착 시간 초과: 높은 음, 대기 없이 진행
+#ifdef DEBUG
+      DEBUG_SERIAL.println(F("Move wait timed out; continuing."));
+#endif
       break;
     }
   }

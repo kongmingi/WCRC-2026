@@ -106,7 +106,6 @@ int16_t slPSD, valPSD;
 bool gameOver = false;
 uint8_t inv[5][4] = { { 0 } };
 const uint8_t INV_EMPTY = 7;
-const uint8_t INV_PICKED = 8;
 bool lapOn = false;
 uint32_t lapStart = 0, lapLast = 0;
 
@@ -132,7 +131,7 @@ void InvPrint()
     Serial.print( F("[INV] L") ); Serial.print( l ); Serial.print( ':' );
     for( int c = 1; c <= 4; c++ ) {
       Serial.print( ' ' );
-      if( inv[c][l] == 0 ) Serial.print( '?' ); else if( inv[c][l] == INV_EMPTY ) Serial.print( '-' ); else if( inv[c][l] == INV_PICKED ) Serial.print( 'x' ); else Serial.print( inv[c][l] );
+      if( inv[c][l] == 0 ) Serial.print( '?' ); else if( inv[c][l] == INV_EMPTY ) Serial.print( '-' ); else Serial.print( inv[c][l] );
     }
     Serial.println();
   }
@@ -367,33 +366,6 @@ void PerformFrontMoveAlign( int psdTarget, int psdTolerance )
 
 // B 정면 / 복귀 CELL2: 전방 평균 거리와 FR-FL 차이를 함께 맞추는 간단 연속 보정.
 // 이동·회전 허용 오차 2 사용. 종료는 허용 오차 도달뿐 아니라 반복/시간 한도도 포함한다.
-bool RotateAlignFront2( int16_t moveErr, int16_t rotErr, int16_t moveTol, int16_t rotTol, bool reset, int32_t speed )
-{
-  static uint8_t stableCount = 0;
-  if( reset ) stableCount = 0;
-  if( abs( moveErr ) <= moveTol && abs( rotErr ) <= rotTol ) {
-    if( ++stableCount >= ALIGN_STABLE_COUNT ) {
-      SetMobileGoalVelocityForSyncWrite( dxl, 0, 0, 0, 0 );
-      return false;
-    }
-  } else {
-    stableCount = 0;
-  }
-  const float mc = constrain( (float)moveErr * PSD_MOVE_CONTROL_RATIO, -1.0f, 1.0f );
-  const float rc = constrain( (float)rotErr * PSD_ROTATE_CONTROL_RATIO, -1.0f, 1.0f );
-  int32_t mv = round( mc * speed );
-  int32_t rv = round( rc * speed );
-  if( abs( moveErr ) <= moveTol ) mv = 0;
-  else if( abs( mv ) < movelessSpeed ) mv = moveErr > 0 ? movelessSpeed : -movelessSpeed;
-  if( abs( rotErr ) <= rotTol ) rv = 0;
-  else if( abs( rv ) < movelessSpeed ) rv = rotErr > 0 ? movelessSpeed : -movelessSpeed;
-  const int32_t a = constrain( mv + rv, -speed, speed );
-  const int32_t b = constrain( mv - rv, -speed, speed );
-  SetMobileGoalVelocityForSyncWrite( dxl, a, b, a, b );
-  delay( alignInnerLoopDelay );
-  return true;
-}
-
 void PerformMoveRotateAlign( int frontAvgTarget, int moveTolerance, int rotateTolerance, int rotationAdjust )
 {
   ChangeMobilebaseMode2VelocityControlMode( dxl );
@@ -412,8 +384,10 @@ void PerformMoveRotateAlign( int frontAvgTarget, int moveTolerance, int rotateTo
       GetValueFromFrontPSDSensors( &flPSD, &frPSD );
       if( millis() - startTime >= ALIGN_TIMEOUT ) { bTimeout = true; break; }
 
-      if( ! RotateAlignFront2( frontAvgTarget - (flPSD + frPSD) / 2, (frPSD - flPSD) - rotationAdjust,
-              moveTolerance, rotateTolerance, i == 0 && j == 0, MOVE_ALIGN_SPEED ) )
+      if( ! RotateAlignWithFront2PSD( dxl,
+              frontAvgTarget - (flPSD + frPSD) / 2, (frPSD - flPSD) - rotationAdjust,
+              moveTolerance, rotateTolerance, PSD_MOVE_CONTROL_RATIO, PSD_ROTATE_CONTROL_RATIO,
+              i == 0 && j == 0, MOVE_ALIGN_SPEED ) )
         break;
       nAdjusted++;
     }
@@ -781,26 +755,14 @@ void ReadOrderLight( bool lampOn )
   for( int f = 0; f < ORDER_FRAMES; ++f ) {
     bool used[ORDER_TRACK_MAX] = { false };
     if( pixy.ccc.getBlocks( true, 0x3F ) >= 0 ) {
-      int bl[12], br[12], bs[12], nb = 0;
-      for( int j = 0; j < pixy.ccc.numBlocks && nb < 12; ++j ) {
+      for( int j = 0; j < pixy.ccc.numBlocks; ++j ) {
         const int sig = pixy.ccc.blocks[j].m_signature;
         if( sig < 1 || sig > MISSION_COLOR_COUNT ) continue;
-        const int hw = pixy.ccc.blocks[j].m_width / 2;
-        bl[nb] = pixy.ccc.blocks[j].m_x - hw; br[nb] = pixy.ccc.blocks[j].m_x + hw; bs[nb++] = sig;
-      }
-      for( int a = 0; a < nb - 1; ++a )
-        for( int b = a + 1; b < nb; ++b )
-          if( bl[a] > bl[b] ) { int t = bl[a]; bl[a] = bl[b]; bl[b] = t; t = br[a]; br[a] = br[b]; br[b] = t; t = bs[a]; bs[a] = bs[b]; bs[b] = t; }
-      for( int i = 0; i < nb; ) {
-        int left = bl[i], right = br[i], k = i + 1;
-        while( k < nb && bs[k] == bs[i] && bl[k] - right <= ORDER_MERGE_GAP_PX ) { if( br[k] > right ) right = br[k]; k++; }
-        const int sig = bs[i];
-        const int width = right - left;
-        const int x = ( left + right ) / 2;
-        i = k;
-        const int copies = width >= ORDER_JOIN_WIDTH_PX ? 2 : 1;
-        for( int c = 0; c < copies; ++c ) {
-          const int px = copies == 1 ? x : x + (c == 0 ? -width / 4 : width / 4);
+        const int width = pixy.ccc.blocks[j].m_width;
+        const int x = pixy.ccc.blocks[j].m_x;
+        const int copies = width >= 115 ? 2 : 1; // Existing trial split threshold.
+        for( int k = 0; k < copies; ++k ) {
+          const int px = copies == 1 ? x : x + (k == 0 ? -width / 4 : width / 4);
           int best = -1, nearest = ORDER_MATCH_X_PX + 1;
           for( int t = 0; t < orderTrackCount; ++t ) {
             const int d = abs( px - orderTrackX[t] );
@@ -883,9 +845,16 @@ int ReadMissionSlots( uint8_t* result )
     if( slots[i] ) result[n++] = slots[i];
   }
   Serial.println(); Serial2.println();
-  if( !leftOk || !rightOk || n != assignCount ) {
-    Serial.print( F("[ORDER] WARNING uncertain/count read ") ); Serial.print( n ); Serial.print( F(" / zone ") ); Serial.println( assignCount );
-    Serial2.println( F("[ORDER] WARNING uncertain/count mismatch: continue with zone order for the rest") );
+  if( !leftOk || !rightOk || !IsCompleteMissionBlockSequence( result, n ) ) {
+    Serial.println( F("[ORDER] uncertain/count mismatch: check zone and retry t5 2") );
+    Serial2.println( F("[ORDER] uncertain/count mismatch: check zone and retry t5 2") );
+    nMissionBlocksFound = 0;
+    memset( targetBlockSigmaps, 0, sizeof(targetBlockSigmaps) );
+    memset( goalPositions, 0, sizeof(goalPositions) );
+    gameOver = true;
+    lapOn = false;
+    ShowColor( 0, 0, 0 );
+    return -1;
   }
   return n;
 }
@@ -1028,8 +997,6 @@ int CamFindBlockAndPickup( int blockIndex, int columnNo, int preferLayer = 0 ) /
         }
       }
     }
-    const uint8_t known = inv[columnNo][layer];
-    if( known == INV_PICKED || ( known >= 1 && known <= MISSION_COLOR_COUNT && ! ( targetBlockSigmaps[blockIndex] & ( 1 << ( known - 1 ) ) ) ) ) continue;
     invCol = columnNo;
     invLayer = layer;
 
@@ -1074,7 +1041,7 @@ int CamFindBlockAndPickup( int blockIndex, int columnNo, int preferLayer = 0 ) /
 
     invCol = 0;
     PickBlockAtLayer( layer );
-    inv[columnNo][layer] = INV_PICKED;
+    inv[columnNo][layer] = INV_EMPTY;
     return layer;
   }
 
@@ -1246,7 +1213,7 @@ void ReturnToCell1FromDropside();
 void ReturnFromDropboxBToCell1()
 {
   ReturnFromDropboxBToCell2();
-  DriveDistanceSmoothWithInternalAcceleration( dxl, mm_L_B_RETURN_TO_REF, MOVE_LEFTWARD, SEARCH_MM_PER_SEC );
+  DriveDistanceSmoothWithInternalAcceleration( dxl, mm_L_CELL2_to_CELL1 + mm_R_REF_to_CELL1, MOVE_LEFTWARD, SEARCH_MM_PER_SEC );
   ReturnToCell1FromDropside();
 }
 
