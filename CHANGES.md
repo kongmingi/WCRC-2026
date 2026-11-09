@@ -6,11 +6,14 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
-## T30 (팀원 WCRC_T26_updated 기준, T27~T29 내용은 안 들어감)
-- 팀원 변경: 순서 읽기 4번 촬영(왼쪽 켬/끔, 오른쪽 끔/켬) + x 로 합치기, 순서 불확실하면 경기 중단, SW2 정지 후 상태 초기화·팔 복귀
-- 이동 속도 140, 90° 회전은 ROTATE_MM_PER_SEC 100 따로
-- B 갈 때 왼쪽 회전 +2° (B_GO_TURN1/2_ADJ_DEG 2), B 복귀 오른쪽은 0
-- POSE_ORDER_R { 80, 2007, 3929, 932 }
+## T30 (팀원 WCRC_T26_updated 기준 + T27~T29 다시 넣음)
+- 팀원 변경: 순서 읽기 4번 촬영(왼쪽 켬/끔, 오른쪽 끔/켬) + x 로 합치기, SW2 정지 후 상태 초기화·팔 복귀
+- 순서가 불확실하거나 개수가 안 맞으면 경고만 하고 진행 (팀원 코드의 경기 중단 제거). 못 읽은 블록은 배정표 순서로 뒤에
+- 순서 읽기: 같은 색 조각(간격 20px 이하) 합치고 폭 115 이상이면 2개 (T27)
+- B 복귀 왼쪽 150 + SL 572 (T27), 아는 칸 건너뛰기·집은 칸 x (T27)
+- PSD 동시 맞춤 최소 속도 (T28), 이동 시간 초과 시 정지 + `[MOVE] timeout` (T29, Mobilebase.cpp)
+- 이동 속도 140, 90° 회전 ROTATE_MM_PER_SEC 100, B 갈 때 왼쪽 회전 +2°, POSE_ORDER_R { 80, 2007, 3929, 932 }
+- Tuning 추가: ROTATE_MM_PER_SEC, B_GO_TURN1/2_ADJ_DEG, ORDER_JOIN_WIDTH_PX, ORDER_MERGE_GAP_PX, mm_L_B_RETURN_TO_REF
 
 ## T29 (T28 개선, T28 유지)
 - 이동 시간 초과면 바퀴 즉시 정지(목표 취소) + `[MOVE] timeout` 출력, 전송 실패도 출력. Mobilebase.cpp
