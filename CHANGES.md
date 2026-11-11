@@ -10,6 +10,10 @@
 - 이동 속도 140, 90° 회전 ROTATE_MM_PER_SEC 100, B 갈 때 왼쪽 회전 +2°, POSE_ORDER_R { 80, 2007, 3929, 932 }
 - T27~T29 내용 없음, 순서 불확실하면 경기 중단(팀원 코드)
 
+## INSTR (강사님 hex 복원)
+- 받은 hex 를 분석해서 소스가 archive T1 Mission2B 와 같음을 확인 (문장, 순서, 거리·PSD 값, 관절 제한, 배정표 바이트)
+- INSTR/Mission2B = T1 소스, INSTR/hex = 원본 hex, INSTR/README.md = 근거와 주의
+
 ## T34 (팀원 1c 기준: T32 + 열 간격 67/69/65, 왼 65/73/70, 1열 110)
 - t5 3: 팔 자세 대기 1초+1초 → 0.5초+0.5초, 858 전진 뒤 오른쪽 30 (mm_R_ARRIVE_SHIFT) 먼저 빠진 다음 A·B 복귀와 같은 함수(AlignFromDropside: SL 572 → 벽 → 오른쪽 110 → 1열 FR)
 - t7 탐색 시작 때 1열 FR 중복 맞춤 삭제
