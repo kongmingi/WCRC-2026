@@ -10,6 +10,14 @@
 - 이동 속도 140, 90° 회전 ROTATE_MM_PER_SEC 100, B 갈 때 왼쪽 회전 +2°, POSE_ORDER_R { 80, 2007, 3929, 932 }
 - T27~T29 내용 없음, 순서 불확실하면 경기 중단(팀원 코드)
 
+## T35 (T34 정리, 동작은 T34 와 같음)
+- 팔 자세는 저장된 숫자 4개 그대로만 움직임. j1 을 정면·왼쪽 90° 로 강제로 바꾸던 숨은 규칙 삭제 (J1_FRONT 삭제)
+- 운반 자세를 둘로 나눔: POSE_CARRY(정면, carry) / POSE_CARRY_LEFT(왼쪽, carryl). 값은 예전 동작과 같게 1013 / -11
+- 좌진용 팔 자세를 코드 안 숫자에서 Tuning.h POSE_ORDER_MOVE(ordermove) 로
+- 이름 추가: drive(=예전 p 3), carryl, ordermove. 안 쓰는 POSE_ORDER_VIEW, POSE_HUB 삭제
+- `p 이름`, `save 이름`, `list` 가 "이름 -> Tuning.h 변수 = { 값 }" 으로 출력
+- list 가 깨진 이름을 출력하던 버그 수정
+
 ## INSTR (강사님 hex 복원)
 - 받은 hex 를 분석해서 소스가 archive T1 Mission2B 와 같음을 확인 (문장, 순서, 거리·PSD 값, 관절 제한, 배정표 바이트)
 - INSTR/Mission2B = T1 소스, INSTR/hex = 원본 hex, INSTR/README.md = 근거와 주의
