@@ -6,6 +6,12 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T39 (T38 + 빠른 인식)
+- 적재함 인식: 고정 3장 기준 → Tuning CAM_SEARCH_MIN_HITS (지금 3장 중 1장)
+- CAM_ALIGN_RECHECK=false: 카메라 x 보정 한 번 이동 후 다시 확인 없이 바로 집기 (CAM_X_ALIGN_MAX_TRY 1)
+- Tuning.h = 11/12 사용자 값 그대로 + 위 3줄 (램프 전부 켬, GRIP_CLOSE 700, MOVE_LAYER_POSE_TIME 600, Zone A/B 새 자세)
+- 확인 필요: POSE_ZONE_A[0] j3 2569 (관절 하한 2650 밑)
+
 ## T38 (T37 + 순서 읽기 자리별 ROI)
 - 순서 읽기: 자리 6개마다 xy 범위(ORDER_SLOT_X/Y_MIN/MAX), 높이 ORDER_MIN_BLOCK_H 미만 무시, 자리마다 가장 큰 블록만 투표
 - 못 읽은 자리는 0 (다른 자리 안 밀림). 배정표 색 구성으로 채움: 남은 색이 한 종류면 확정(final), 아니면 추측(guess, ORDER_GUESS_IF_UNSURE)
