@@ -6,6 +6,13 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T38 (T37 + 순서 읽기 자리별 ROI)
+- 순서 읽기: 자리 6개마다 xy 범위(ORDER_SLOT_X/Y_MIN/MAX), 높이 ORDER_MIN_BLOCK_H 미만 무시, 자리마다 가장 큰 블록만 투표
+- 못 읽은 자리는 0 (다른 자리 안 밀림). 배정표 색 구성으로 채움: 남은 색이 한 종류면 확정(final), 아니면 추측(guess, ORDER_GUESS_IF_UNSURE)
+- 색 개수가 넘치면 표가 가장 적은 자리를 비우고 다시 채움 (빨강→주황 오인식 대응)
+- 출력: [ORDER] read: / final: / guess:
+- t5 2 좌진 팔 자세 ORDER_TRAVEL_ARM = Tuning.h POSE_ORDER_VIEW (예전 고정값 -622… 삭제)
+
 ## T37 (T36 + 적재함 탐색 램프)
 - 적재함에서 찾을 때(t7, t4, t3 층 색) 램프를 색별로 켜고 끔: Tuning.h STORAGE_LAMP_FOR_COLOR[7] (0=끔, 1=켬, 순서 -,빨,주,노,초,파,보), 기본 전부 끔
 - 램프 상태가 바뀔 때만 STORAGE_LAMP_SETTLE_MS(500) 대기
