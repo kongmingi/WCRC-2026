@@ -11,6 +11,8 @@
 - CAM_ALIGN_RECHECK=false: 카메라 x 보정 한 번 이동 후 다시 확인 없이 바로 집기 (CAM_X_ALIGN_MAX_TRY 1)
 - Tuning.h = 11/12 사용자 값 그대로 + 위 3줄 (램프 전부 켬, GRIP_CLOSE 700, MOVE_LAYER_POSE_TIME 600, Zone A/B 새 자세)
 - 확인 필요: POSE_ZONE_A[0] j3 2569 (관절 하한 2650 밑)
+- 파일 이름 전부 T39_ 접두어 (T39/T39_Mission2B/T39_Mission2B.ino, T39_Tuning.h 등), #include 도 같이 변경
+- T25~T36 은 archive/ 로 이동
 
 ## T38 (T37 + 순서 읽기 자리별 ROI)
 - 순서 읽기: 자리 6개마다 xy 범위(ORDER_SLOT_X/Y_MIN/MAX), 높이 ORDER_MIN_BLOCK_H 미만 무시, 자리마다 가장 큰 블록만 투표

@@ -1,7 +1,7 @@
 #include "Arduino.h"
-#include "Debug.h"
-#include "Motor.h"
-#include "Devices.h"
+#include "T39_Debug.h"
+#include "T39_Motor.h"
+#include "T39_Devices.h"
 
 /////////////////////////////////////////////  디버그 관련
 

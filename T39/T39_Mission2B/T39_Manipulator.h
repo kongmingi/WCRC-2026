@@ -1,8 +1,8 @@
 #ifndef MANIPULATOR_H
 #define MANIPULATOR_H
 
-#include "Motor.h"
-#include "Tuning.h"
+#include "T39_Motor.h"
+#include "T39_Tuning.h"
 
 //////////////  모터 구동용 변수/상수
 #define ARM_DXL_ID_1            0x05 // 매니퓰레이터 1번 모터 아이디 (가장 아래)

@@ -1,9 +1,9 @@
 #ifndef MOBILEBASE_H
 #define MOBILEBASE_H
 
-#include "Tuning.h"
+#include "T39_Tuning.h"
 
-#include "Motor.h"
+#include "T39_Motor.h"
 
 //////////////  모터 구동용 변수/상수
 #define MOBILE_DXL_ID_FL            0x01  // 좌측 전방 모터 아이디

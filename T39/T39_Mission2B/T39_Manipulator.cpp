@@ -1,6 +1,6 @@
 #include "Arduino.h"
-#include "Debug.h"
-#include "Manipulator.h"
+#include "T39_Debug.h"
+#include "T39_Manipulator.h"
 
 #include <EEPROM.h>
 

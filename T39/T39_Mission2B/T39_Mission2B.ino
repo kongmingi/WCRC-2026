@@ -9,12 +9,12 @@
 
 #include <setjmp.h>
 #include <EEPROM.h>
-#include "Debug.h"
-#include "Devices.h"
-#include "Manipulator.h"
-#include "Mobilebase.h"
+#include "T39_Debug.h"
+#include "T39_Devices.h"
+#include "T39_Manipulator.h"
+#include "T39_Mobilebase.h"
 #include <Adafruit_NeoPixel.h>
-#include "Tuning.h"
+#include "T39_Tuning.h"
 
 //////////////  장치
 

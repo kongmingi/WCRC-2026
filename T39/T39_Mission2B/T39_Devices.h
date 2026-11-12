@@ -2,7 +2,7 @@
 #define DEVICES_H
 
 #include "Arduino.h"
-#include "Tuning.h"
+#include "T39_Tuning.h"
 #include <Pixy2.h> // SPI 통신하는 Pixy2 라이브러리를 포함시킴
 #include <Dynamixel2Arduino.h>
 
