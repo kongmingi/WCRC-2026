@@ -6,6 +6,15 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T40 (T39 + 순서 읽기 스윕) — 파일 이름 T40_
+- ORDER_USE_SWEEP=true: POSE_ORDER_SWEEP(j2~j4 고정)에서 j1 을 시작→ORDER_SWEEP_J1_END(램프 켬), 다시 되돌아오며(램프 끔) 연속 촬영
+- 위치 u = x + ORDER_SWEEP_PX_PER_J1 × j1 로 같은 블록 묶기(ORDER_SWEEP_MERGE_PX), 표 ORDER_SWEEP_MIN_HITS 미만 버림, 폭 ORDER_SWEEP_JOIN_W 이상은 붙은 2개로 나눔
+- 왼쪽부터 정렬 = 순서. 간격 ORDER_SWEEP_GAP_PX 초과 = 빈칸 1개. 이후 배정표로 채우기(T38 과 같음)
+- 기본값은 orderL 자세에서 잰 값(0.64, 670~1150). 위에서 보는 자세로 바꾸면 비율·범위 다시 재기
+- 명령 `order`: 제자리에서 순서 읽기만 시험 ([SWEEP] u n votes / [ORDER] read / final 출력)
+- false 로 두면 T39 자리별 ROI 방식
+- Tuning.h = 11/12 사용자 값 + 위 값들. 확인 필요: POSE_ZONE_A[0] j3 6521 > JOINT_MAX 6400
+
 ## T39 (T38 + 빠른 인식)
 - 적재함 인식: 고정 3장 기준 → Tuning CAM_SEARCH_MIN_HITS (지금 3장 중 1장)
 - CAM_ALIGN_RECHECK=false: 카메라 x 보정 한 번 이동 후 다시 확인 없이 바로 집기 (CAM_X_ALIGN_MAX_TRY 1)
