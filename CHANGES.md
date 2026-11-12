@@ -6,6 +6,13 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T41 (TT_1 = T39 + B 배정표 기준) — 파일 이름 T41_, 순서 읽기는 T39 방식(스윕 없음)
+- B 복귀: 후진 366 → 우회전 → 전진 139 → FR PSD_RETURN_A_FR(194) 2번 → SR PSD_RETURN_STORAGE_SR(275) → [B RET] psd 출력 → 우회전 → 정면 311 / FR-FL -3 → SL 222 → [B RET] psd 출력 → 2열에서 끝 (1열 안 감)
+- 탐색: 지금 열부터 4열까지 → 1열까지 (1열 시작이면 예전과 같음, B 복귀면 2→3→4→3→2→1)
+- 기억한 칸: 지금 열에서 바로 이동, 없으면 그 자리부터 탐색
+- t5 5 N 끝나면 열 번호 2 유지
+- Tuning: PSD_STORAGE_CELL2_SL 200 → 222. 194/275 는 강사님 값(새 로봇 미측정)
+
 ## T40 (T39 + 순서 읽기 스윕) — 파일 이름 T40_
 - ORDER_USE_SWEEP=true: POSE_ORDER_SWEEP(j2~j4 고정)에서 j1 을 시작→ORDER_SWEEP_J1_END(램프 켬), 다시 되돌아오며(램프 끔) 연속 촬영
 - 위치 u = x + ORDER_SWEEP_PX_PER_J1 × j1 로 같은 블록 묶기(ORDER_SWEEP_MERGE_PX), 표 ORDER_SWEEP_MIN_HITS 미만 버림, 폭 ORDER_SWEEP_JOIN_W 이상은 붙은 2개로 나눔
