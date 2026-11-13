@@ -11,7 +11,9 @@
 - 예: 빨강을 인식 존은 sig 1, 적재함은 sig 7 로 등록하고 SIG7_COLOR = 1
 - t1 에서 sig 7 은 "sig 7=1" 처럼 표시
 - Pixy 요청 범위 sig 1~6 → 1~7 (0x3F → 0x7F)
-- Mission2B.ino 는 GitHub T44 기준 (사용자가 로컬에서 고친 1280줄·SL 한 줄은 들어 있지 않음). T44 는 archive 로
+- Mission2B.ino 는 GitHub T44 기준 (사용자가 로컬에서 고친 1280줄·SL 한 줄은 들어 있지 않음)
+- T45_Tuning.h = 11/13 사용자 최종 값 그대로 + SIG7_COLOR 0 (PSD_STORAGE_FR 306, 적재함 주황 램프 끔, pg3 j3 6370, 배정 A/B 섞음)
+- T44 는 사용자 요청으로 루트에 다시 복원 (archive 에서 되돌림)
 
 ## T44 (T43 + 순서 읽기 빈자리 구분) — 파일 이름 T44_
 - 자리마다 잡힌 횟수(hits)와 가장 많이 잡힌 색(weak) 출력: [ORDER] hits: / weak:

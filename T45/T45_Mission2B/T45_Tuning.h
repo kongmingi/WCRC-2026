@@ -26,7 +26,7 @@ const MissionBlockAssignment missionAssignments[] = {
 };
 #else
 const MissionBlockAssignment missionAssignments[] = {
-  { 1, ZB(1) }, { 1, ZB(5) }, { 3, ZB(4) }, { 2, ZB(2) }, { 5, ZB(7) }, //{ 6, ZB(6) },
+  { 1, ZA(1) }, { 4, ZB(5) }, { 3, ZB(4) }, { 2, ZA(2) }, { 5, ZB(7) }, { 6, ZB(6) },
 };
 #endif
 
@@ -64,7 +64,7 @@ const int PSD_SEARCH_WALL_ROT_ADJUST = -3;
 const int PSD_SEARCH_WALL_TOLERANCE = 3;
 const int PSD_DROPBOXA_DROP_SL = 611;
 const int PSD_DROPBOXA_DROP_SPEED = 100;
-const int PSD_STORAGE_FR = 312;
+const int PSD_STORAGE_FR = 306;
 const int PSD_STORAGE_MOV_TOLERANCE = 2;
 const int PSD_STORAGE_FRONT_AVG = 311;
 const int PSD_STORAGE_COL_ROT_ADJUST[4] = { 0, -3, -3, 0 };
@@ -131,7 +131,7 @@ const int MAX_PIXY_SEARCH_X = 238;
 const int MIN_PIXY_SEARCH_Y = 52;
 const int MAX_PIXY_SEARCH_Y = 145;
 const int LAYER_POSE_SETTLE_MS = 80;
-const bool STORAGE_LAMP_FOR_COLOR[7] = { 0, 1, 1, 1, 1, 1, 1 };
+const bool STORAGE_LAMP_FOR_COLOR[7] = { 0, 1, 0, 1, 1, 1, 1 };
 const int STORAGE_LAMP_SETTLE_MS = 500;
 const uint8_t SIG7_COLOR = 0;
 
@@ -174,7 +174,7 @@ const Pose POSE_HUB        = { 2046, 3005, 5562, 1472 };
 
 const Pose POSE_SCAN[3]      = { { 2056, 2305, 5085, 2495 }, { 2036, 2659, 5733, 1364 }, { 2039, 2477, 6063, 1362 } };
 const Pose POSE_PICK_APPROACH[3] = { { 2085, 2584, 5209, 2261 }, { 2057, 2729, 5636, 1662 }, { 2038, 2586, 6188, 1361 } };
-const Pose POSE_PICK_GRIP[3]     = { { 2079, 1963, 5505, 2659 }, { 2060, 2205, 5803, 2127 }, { 2060, 2215, 6402, 1528 } };
+const Pose POSE_PICK_GRIP[3]     = { { 2079, 1963, 5505, 2659 }, { 2060, 2205, 5803, 2127 }, { 2060, 2215, 6370, 1528 } };
 
 const Pose POSE_ZONE_A[8] = {
   {  643, 1716, 6521, 1930  }, {756, 1866, 6302, 1892 }, { 815, 1840, 6300, 1866  }, { 963, 1937, 6111, 1974 },
