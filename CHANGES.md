@@ -6,6 +6,12 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T43 (T42 + B 복귀 돌기 전 정렬 새 값) — 파일 이름 T43_
+- B 복귀: 후진 366 → 우회전 → 전진 139 → (Zone A 쪽) 정면 avg 219 / FR-FL -50 → SR 284 → [B RET] psd → 우회전 → FR 312 → 정면 312 / FR-FL 0 → [B RET] psd → 2열에서 탐색
+- SL 222 정렬 삭제, B_RETURN_ALIGN_BEFORE_TURN·PSD_RETURN_A_FR 삭제
+- 새 Tuning: PSD_RETURN_A_AVG 219, PSD_RETURN_A_ROT_ADJUST -50, PSD_RETURN_STORAGE_SR 284, PSD_RETURN_STORAGE_ROT_ADJUST 0 (11/13 2열 정위치에서 turn L 실측, ±20mm 에서 고르게 변함 확인)
+- Tuning.h = 11/13 사용자 값 + POSE_ZONE_B 11/13 새로 잡은 값
+
 ## T42 (T41 − 돌기 전 정렬) — 파일 이름 T42_
 - B 복귀: 후진 366 → 우회전 → 전진 139 → 우회전 → 정면 311 / FR-FL -3 → SL 222 → 2열에서 바로 탐색
 - 돌기 전 FR 194·SR 275 정렬은 B_RETURN_ALIGN_BEFORE_TURN=false 로 끔 (225 넣었을 때 4열로 감)
