@@ -10,6 +10,7 @@
 - 자리마다 잡힌 횟수(hits)와 가장 많이 잡힌 색(weak) 출력: [ORDER] hits: / weak:
 - 빈칸 채우기: ① hits ≥ ORDER_PRESENT_MIN_HITS 인 자리에 그 자리 weak 색(남은 색일 때, 많이 잡힌 자리부터) ② 남으면 hits 있는 자리에 왼쪽부터 ③ 그래도 남으면 hits 0 자리(빈자리로 본 곳) 왼쪽부터
 - Tuning.h = 11/13 사용자 T43 값 + ORDER_PRESENT_MIN_HITS 1
+- T37~T43 은 archive/ 로 이동. 앞으로 새 버전을 만들면 이전 버전은 바로 archive/ 로
 
 ## T43 (T42 + B 복귀 돌기 전 정렬 새 값) — 파일 이름 T43_
 - B 복귀: 후진 366 → 우회전 → 전진 139 → (Zone A 쪽) 정면 avg 219 / FR-FL -50 → SR 284 → [B RET] psd → 우회전 → FR 312 → 정면 312 / FR-FL 0 → [B RET] psd → 2열에서 탐색
