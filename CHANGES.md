@@ -6,6 +6,10 @@
 - t4 테스트 H: 3행(L2) 빨강·파랑 놓침 → scan2에서 t1 x,y 확인 필요
 - 6핀 케이블 납땜 부위 5V/GND 불량 의심 (노트북 USB 연결 시에만 Pixy 켜짐)
 
+## T45 대회 버전 (11/14 사용자 TalkFile_T45_Mission2B 그대로)
+- B 가는 길: 회전·후진·366 전진 속도 150 (코드 안 zoneBRotateSpeed / zoneBMoveSpeed)
+- Tuning: 배정표 대회용, WHEEL_RATIO_BWD { 0.992, 1, 0.995, 1 }, PSD_DROPBOX_B_ROT_ADJUST -41, PSD_RETURN_A_ROT_ADJUST -43, SIG7_COLOR 1 (적재함 빨강 = sig 7), pa2 j4 1690, pg2 j1 2070
+
 ## T45 (T44 + sig 7 를 다른 색으로 쓰기) — 파일 이름 T45_
 - Tuning SIG7_COLOR: 0 = 안 씀, 1~6 = Pixy sig 7 을 그 색으로 취급 (순서 읽기·적재함 탐색 둘 다)
 - 예: 빨강을 인식 존은 sig 1, 적재함은 sig 7 로 등록하고 SIG7_COLOR = 1

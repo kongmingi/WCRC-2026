@@ -1250,26 +1250,54 @@ float GetLeftDistanceToDropside( int columnNo )
 
 void GotoDropboxB( int columnNo )
 {
+  const int32_t zoneBRotateSpeed = 150;
+  const int32_t zoneBMoveSpeed = 150;
+
   PauseIfStepMode( F("go to Dropbox B") );
 
-  // 집기 때의 카메라 X 보정은 칸 중앙 맞춤이므로 여기서 되돌리거나 거리에서 빼지 않는다.
-  RotateLeft90Degree( dxl, ROTATE_MM_PER_SEC, B_GO_TURN1_ADJ_DEG );
+  // 첫 번째 90도 좌회전
+  RotateLeft90Degree(
+      dxl, zoneBRotateSpeed, B_GO_TURN1_ADJ_DEG
+  );
 
-  // TODO-03 구현: CELL1 에서 집었을 때만, 1차 좌회전 뒤 정면 Dropbox A 기준
+  // CELL1에서 출발했을 때 기존 정면 보정
   if( columnNo == 1 )
-    PerformMoveRotateAlign( PSD_DROPBOXA_FRONT_AVG, PSD_DROPBOX_B_MOV_TOLERANCE, PSD_DROPBOX_B_ROT_TOLERANCE, PSD_DROPBOXA_ROT_ADJUST );
+    PerformMoveRotateAlign(
+        PSD_DROPBOXA_FRONT_AVG,
+        PSD_DROPBOX_B_MOV_TOLERANCE,
+        PSD_DROPBOX_B_ROT_TOLERANCE,
+        PSD_DROPBOXA_ROT_ADJUST
+    );
 
+  // 출발 열에 따른 후진
   if( columnNo < 4 )
-    DriveDistanceSmoothWithInternalAcceleration( dxl, GetBackwardDistanceToDropboxB(columnNo), MOVE_BACKWARD, SIDE_MM_PER_SEC );
+    DriveDistanceSmoothWithInternalAcceleration(
+        dxl,
+        GetBackwardDistanceToDropboxB(columnNo),
+        MOVE_BACKWARD,
+        zoneBMoveSpeed
+    );
 
-  RotateLeft90Degree( dxl, ROTATE_MM_PER_SEC, B_GO_TURN2_ADJ_DEG );
+  // 두 번째 90도 좌회전
+  RotateLeft90Degree(
+      dxl, zoneBRotateSpeed, B_GO_TURN2_ADJ_DEG
+  );
 
-  DriveDistanceSmoothWithInternalAcceleration( dxl, mm_F_TO_DROPBOX_B, MOVE_FORWARD, MOVE_MM_PER_SEC );
+  // Zone B까지 전진
+  DriveDistanceSmoothWithInternalAcceleration(
+      dxl,
+      mm_F_TO_DROPBOX_B,
+      MOVE_FORWARD,
+      zoneBMoveSpeed
+  );
 
-  // TODO-04 구현: B 정면 거리와 비틀림
-  PerformMoveRotateAlign( PSD_DROPBOX_B_FRONT_AVG, PSD_DROPBOX_B_MOV_TOLERANCE, PSD_DROPBOX_B_ROT_TOLERANCE, PSD_DROPBOX_B_ROT_ADJUST );
-
-  //DelayOrWaitButtonOrInputChar();  // PPP
+  // Zone B 도착 후 기존 PSD 보정
+  PerformMoveRotateAlign(
+      PSD_DROPBOX_B_FRONT_AVG,
+      PSD_DROPBOX_B_MOV_TOLERANCE,
+      PSD_DROPBOX_B_ROT_TOLERANCE,
+      PSD_DROPBOX_B_ROT_ADJUST
+  );
 }
 
 // B에서 CELL2까지의 공통 복귀. 다음 블록 탐색을 위한 CELL1 복귀에 사용한다.

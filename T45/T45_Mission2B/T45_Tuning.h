@@ -26,7 +26,7 @@ const MissionBlockAssignment missionAssignments[] = {
 };
 #else
 const MissionBlockAssignment missionAssignments[] = {
-  { 1, ZA(1) }, { 4, ZB(5) }, { 3, ZB(4) }, { 2, ZA(2) }, { 5, ZB(7) }, { 6, ZB(6) },
+   { 1, ZA(4) }, { 1, ZA(7) }, { 3, ZB(6) }, { 4, ZB(3) }, { 4, ZA(1) }, { 5, ZA(5) },
 };
 #endif
 
@@ -39,7 +39,7 @@ const int32_t SEARCH_MM_PER_SEC = 120;
 const int32_t MOVE_ALIGN_SPEED = 160;
 
 const float WHEEL_RATIO_FWD[4]   = { 1.000, 1.000, 1.000, 1.000 };
-const float WHEEL_RATIO_BWD[4]   = { 1.000, 1.000, 1.000, 1.000 };
+const float WHEEL_RATIO_BWD[4]   = { 0.992, 1.000, 0.995, 1.000 };
 const float WHEEL_RATIO_LEFT[4]  = { 0.990, 0.990, 1.000, 1.000 };
 const float WHEEL_RATIO_RIGHT[4] = { 0.990, 0.990, 1.000, 1.000 };
 
@@ -72,13 +72,13 @@ const int PSD_STORAGE_ROT_TOLERANCE = 3;
 const int PSD_STORAGE_CELL2_SL = 222;
 const int PSD_STORAGE_CELL2_SL_TOLERANCE = 2;
 const int PSD_DROPBOX_B_FRONT_AVG = 554;
-const int PSD_DROPBOX_B_ROT_ADJUST = -29;
+const int PSD_DROPBOX_B_ROT_ADJUST = -41;
 const int PSD_DROPBOX_B_MOV_TOLERANCE = 2;
 const int PSD_DROPBOX_B_ROT_TOLERANCE = 2;
 const int PSD_DROPBOXA_FRONT_AVG = 300;
 const int PSD_DROPBOXA_ROT_ADJUST = -2;
 const int PSD_RETURN_A_AVG = 219;
-const int PSD_RETURN_A_ROT_ADJUST = -50;
+const int PSD_RETURN_A_ROT_ADJUST = -43;
 const int PSD_RETURN_STORAGE_SR = 284;
 const int PSD_RETURN_STORAGE_ROT_ADJUST = 0;
 
@@ -133,7 +133,7 @@ const int MAX_PIXY_SEARCH_Y = 145;
 const int LAYER_POSE_SETTLE_MS = 80;
 const bool STORAGE_LAMP_FOR_COLOR[7] = { 0, 1, 0, 1, 1, 1, 1 };
 const int STORAGE_LAMP_SETTLE_MS = 500;
-const uint8_t SIG7_COLOR = 0;
+const uint8_t SIG7_COLOR = 1;
 
 
 const int16_t GRIP_OPEN = 250;
@@ -173,8 +173,8 @@ const Pose POSE_DRIVE      = { 2013, 3130, 5233, 1470 };
 const Pose POSE_HUB        = { 2046, 3005, 5562, 1472 };
 
 const Pose POSE_SCAN[3]      = { { 2056, 2305, 5085, 2495 }, { 2036, 2659, 5733, 1364 }, { 2039, 2477, 6063, 1362 } };
-const Pose POSE_PICK_APPROACH[3] = { { 2085, 2584, 5209, 2261 }, { 2057, 2729, 5636, 1662 }, { 2038, 2586, 6188, 1361 } };
-const Pose POSE_PICK_GRIP[3]     = { { 2079, 1963, 5505, 2659 }, { 2060, 2205, 5803, 2127 }, { 2060, 2215, 6370, 1528 } };
+const Pose POSE_PICK_APPROACH[3] = { { 2085, 2584, 5209, 2261 }, { 2057, 2729, 5636, 1690 }, { 2038, 2586, 6188, 1361 } };
+const Pose POSE_PICK_GRIP[3]     = { { 2079, 1963, 5505, 2659 }, { 2070, 2205, 5803, 2127 }, { 2060, 2215, 6370, 1528 } };
 
 const Pose POSE_ZONE_A[8] = {
   {  643, 1716, 6521, 1930  }, {756, 1866, 6302, 1892 }, { 815, 1840, 6300, 1866  }, { 963, 1937, 6111, 1974 },
